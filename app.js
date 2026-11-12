@@ -219,7 +219,8 @@
     try {
       let rows;
       if (hasApi()) {
-        try { rows = await fetchApi(); } catch (e) { console.warn(e); rows = await fetchApiJsonp(); }
+        // JSONP надёжнее fetch: Apps Script не всегда отдаёт CORS-заголовки (напр. при входе в несколько Google-аккаунтов)
+        try { rows = await fetchApiJsonp(); } catch (e) { console.warn(e); rows = await fetchApi(); }
       } else {
         try { rows = await fetchCsv(); } catch (e) { rows = await fetchJsonp(); }
       }
