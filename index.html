@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lego Collection — каталог</title>
+  <meta name="description" content="Каталог коллекции наборов LEGO">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='18' width='56' height='40' rx='6' fill='%23ffd400'/><rect x='12' y='8' width='14' height='12' rx='3' fill='%23ffd400'/><rect x='38' y='8' width='14' height='12' rx='3' fill='%23ffd400'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800;6..12,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="#/" aria-label="На главную">
+        <span class="brand__brick" aria-hidden="true"><i></i><i></i></span>
+        <span class="brand__text">Lego<b>Collection</b></span>
+      </a>
+      <form class="search" role="search" onsubmit="return false">
+        <svg class="search__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4a6 6 0 1 0 3.9 10.6l4.7 4.7 1.4-1.4-4.7-4.7A6 6 0 0 0 10 4Zm0 2a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z"/></svg>
+        <input id="search" type="search" placeholder="Поиск по названию или номеру набора" autocomplete="off" aria-label="Поиск">
+      </form>
+      <button class="tree-toggle" id="treeToggle" type="button" aria-controls="sidebar" aria-expanded="false">Категории</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <main class="content" id="content">
+      <div class="state" id="state">
+        <div class="loader" aria-hidden="true"><span></span><span></span><span></span></div>
+        <p>Загружаю коллекцию из таблицы…</p>
+      </div>
+    </main>
+
+    <aside class="sidebar" id="sidebar" aria-label="Категории">
+      <div class="sidebar__head">
+        <h2>Категории</h2>
+        <button class="sidebar__close" id="treeClose" type="button" aria-label="Закрыть">×</button>
+      </div>
+      <nav id="tree" class="tree"></nav>
+      <div class="sync" id="sync"></div>
+    </aside>
+  </div>
+
+  <div class="backdrop" id="backdrop" hidden></div>
+
+  <footer class="footer">
+    Данные берутся напрямую из Google Таблицы при каждом открытии страницы.
+    LEGO® — товарный знак LEGO Group; сайт не связан с LEGO Group.
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
