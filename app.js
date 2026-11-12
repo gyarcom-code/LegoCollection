@@ -190,7 +190,7 @@
         instruction: get('instruction'),
         box: get('box'),
         comment: get('comment'),
-        search: norm(`${id} ${name}`),
+        search: norm(`${id} ${name} ${catPath.join(' ')}`),
       });
     });
     return items;

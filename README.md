@@ -22,6 +22,11 @@
 
 Настройки (ID таблицы, gid листа, валюта) — в начале `app.js`, объект `CONFIG`.
 
+## Публикация
+
+GitHub Pages раздаёт ветку `gh-pages`. После изменений в `main`:
+`git push origin main:gh-pages` (или в Settings → Pages переключите источник на `main`).
+
 ## Локальный запуск
 
 ```
