@@ -56,7 +56,8 @@
     loadedAt: 0,
     loading: false,
     query: '',
-    sort: 'default',
+    sort: 'priceDesc',
+    cond: '', // фильтр по состоянию ('' — все)
     openNodes: new Set(),
     signature: '',
   };
@@ -336,7 +337,8 @@
     number: { label: 'По номеру', fn: (a, b) => (num(a.id) ?? 0) - (num(b.id) ?? 0) },
     yearDesc: { label: 'Сначала новые', fn: (a, b) => (num(b.year) ?? 0) - (num(a.year) ?? 0) },
     yearAsc: { label: 'Сначала старые', fn: (a, b) => (num(a.year) ?? 9999) - (num(b.year) ?? 9999) },
-    priceDesc: { label: 'Дороже', fn: (a, b) => (priceOf(b) ?? -1) - (priceOf(a) ?? -1) },
+    priceDesc: { label: 'Сначала дорогие', fn: (a, b) => (priceOf(b) ?? -1) - (priceOf(a) ?? -1) },
+    priceAsc: { label: 'Сначала дешёвые', fn: (a, b) => (priceOf(a) ?? Infinity) - (priceOf(b) ?? Infinity) },
     pcsDesc: { label: 'Больше деталей', fn: (a, b) => (num(b.pcs) ?? -1) - (num(a.pcs) ?? -1) },
   };
   const priceOf = (it) => it.blPrice ?? it.boPrice;
@@ -351,6 +353,9 @@
     if (!q) return true;
     return q.split(/\s+/).every((w) => it.search.includes(w));
   }
+
+  const condKey = (it) => norm(it.condition) || 'none';
+  const condMeta = (k) => CONDITIONS[k] || (k === 'none' ? { label: 'Не указано', cls: 'other' } : { label: (state.items.find((it) => condKey(it) === k) || {}).condition || k, cls: 'other' });
 
   function conditionBadge(c) {
     if (!c) return '';
@@ -385,9 +390,19 @@
 
   function renderList(cat, keepScroll) {
     const q = norm(state.query);
-    const list = state.items.filter((it) => inCat(it, cat) && matches(it, q)).sort(SORTS[state.sort].fn);
+    const base = state.items.filter((it) => inCat(it, cat) && matches(it, q));
+    // Варианты состояния считаем по текущей категории и поиску
+    const conds = new Map();
+    base.forEach((it) => { const k = condKey(it); conds.set(k, (conds.get(k) || 0) + 1); });
+    if (state.cond && !conds.has(state.cond)) conds.set(state.cond, 0);
+    const condOrder = Object.keys(CONDITIONS);
+    const condList = [...conds.entries()].sort((a, b) => {
+      const ia = condOrder.indexOf(a[0]), ib = condOrder.indexOf(b[0]);
+      return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib) || a[0].localeCompare(b[0]);
+    });
+    const list = base.filter((it) => !state.cond || condKey(it) === state.cond).sort(SORTS[state.sort].fn);
     const title = cat ? cat.split(' > ').pop() : 'Все наборы';
-    const meta = `${list.length} ${plural(list.length, ['набор', 'набора', 'наборов'])}`;
+    const meta = `${list.length} ${plural(list.length, ['набор', 'набора', 'наборов'])}${state.cond ? ` · ${esc(condMeta(state.cond).label.toLowerCase())}` : ''}`;
     const searchNote = q ? ` по запросу «${esc(state.query)}»${cat ? ` · <a href="#/">искать во всех</a>` : ''}` : '';
     content.innerHTML = `
       <div class="toolbar">
@@ -400,8 +415,19 @@
           <select id="sort">${Object.entries(SORTS).map(([k, s]) => `<option value="${k}"${k === state.sort ? ' selected' : ''}>${s.label}</option>`).join('')}</select>
         </label>
       </div>
-      ${list.length ? `<div class="grid">${list.map(cardHtml).join('')}</div>` : `<div class="empty">Ничего не найдено. Попробуйте другой запрос или категорию.</div>`}`;
+      <div class="filters" role="group" aria-label="Фильтр по состоянию">
+        <span class="filters__label">Состояние:</span>
+        <button type="button" class="chip${!state.cond ? ' active' : ''}" data-cond="">Все <span>${base.length}</span></button>
+        ${condList.map(([k, n]) => `<button type="button" class="chip chip--${condMeta(k).cls}${state.cond === k ? ' active' : ''}" data-cond="${esc(k)}">${esc(condMeta(k).label)} <span>${n}</span></button>`).join('')}
+      </div>
+      ${list.length ? `<div class="grid">${list.map(cardHtml).join('')}</div>` : (state.cond && base.length ? `<div class="empty">В этой категории нет наборов в состоянии «${esc(condMeta(state.cond).label)}». <button type="button" class="link-btn" data-cond="">Показать все</button></div>` : `<div class="empty">Ничего не найдено. Попробуйте другой запрос или категорию.</div>`)}`;
     $('#sort').onchange = (e) => { state.sort = e.target.value; renderList(cat, true); };
+    content.querySelectorAll('.chip, .link-btn').forEach((b) => b.addEventListener('click', () => {
+      state.cond = b.dataset.cond;
+      renderList(cat, true);
+      const bar = content.querySelector('.filters'), chip = content.querySelector('.chip.active');
+      if (bar && chip) bar.scrollLeft = chip.offsetLeft - bar.clientWidth / 2 + chip.clientWidth / 2;
+    }));
     if (!keepScroll) window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
