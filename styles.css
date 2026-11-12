@@ -155,7 +155,7 @@ img { display: block; }
 
 .grid {
   display: grid; gap: 18px;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
 .card {
   display: flex; flex-direction: column;
@@ -165,13 +165,13 @@ img { display: block; }
 }
 .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
 .card__img {
-  position: relative; aspect-ratio: 4 / 3; background: #fff;
+  position: relative; aspect-ratio: 1 / 1; background: #fff;
   border-bottom: 1px solid var(--bg);
 }
-.card__img img { position: absolute; inset: 12px; width: calc(100% - 24px); height: calc(100% - 24px); object-fit: contain; }
+.card__img img { position: absolute; inset: 10px; width: calc(100% - 20px); height: calc(100% - 20px); object-fit: contain; }
 .card__body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
 .card__num { font-size: 13px; font-weight: 800; color: var(--blue); }
-.card__name { font-weight: 700; line-height: 1.3; }
+.card__name { font-weight: 700; line-height: 1.3; font-size: 16px; }
 .card__foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 6px; }
 .card__year { font-size: 13px; color: var(--muted); font-weight: 600; }
 .card__price { font-weight: 800; }
