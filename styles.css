@@ -238,7 +238,7 @@ img { display: block; }
 }
 .gallery { min-width: 0; }
 .gallery__main {
-  position: relative; aspect-ratio: 4 / 3; background: #fff;
+  position: relative; aspect-ratio: 1 / 1; max-height: max(420px, calc(100vh - 150px)); background: #fff;
   border: 1px solid var(--bg); border-radius: var(--radius); overflow: hidden;
 }
 .gallery__main img {
