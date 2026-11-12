@@ -41,6 +41,8 @@
 GitHub Pages раздаёт ветку `gh-pages`. После изменений в `main`:
 `git push origin main:gh-pages` (или в Settings → Pages переключите источник на `main`).
 
+После правок `app.js`/`styles.css` поменяйте `?v=…` в `index.html`, чтобы браузеры не брали старую версию из кэша.
+
 ## Локальный запуск
 
 ```
