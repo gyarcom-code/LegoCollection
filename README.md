@@ -6,15 +6,19 @@
 при каждом открытии страницы (и в фоне раз в 2 минуты), поэтому новая строка в таблице
 сразу появляется в каталоге — ничего пересобирать не нужно.
 
-## Таблица
+## Таблица и API
 
-- Ссылка: https://docs.google.com/spreadsheets/d/1kcXDNkNGZQBX0QCm13GXOpKN0dYYLC2aKXu1_mah4Ho
-- Доступ должен быть «Все, у кого есть ссылка → Читатель».
+- Таблица: https://docs.google.com/spreadsheets/d/1kcXDNkNGZQBX0QCm13GXOpKN0dYYLC2aKXu1_mah4Ho (остаётся приватной).
+- Сайт читает её через веб-приложение Google Apps Script «Lego Collection API»
+  (код — `apps-script/Code.gs`, привязан к таблице, запускается от имени владельца, доступ «Все»).
+  Наружу отдаются только колонки из `PUBLIC_COLUMNS`.
+- URL веб-приложения — `CONFIG.apiUrl` в `app.js`. При изменении `Code.gs` нужно
+  «Управление развертываниями → Изменить → Новая версия», URL останется прежним.
 - Колонки ищутся по заголовкам (порядок можно менять): `Set ID`, `Set Name`, `Condition`,
   `Category/Seria` (подкатегории через ` > `), `Main Photo`, `Photos ;` (ссылки через `;`),
   `Creation Date`, `Link to BrickLink`, `Price on BrickLink`, `Link to BrickOwl`,
   `Price on BrickOwl`, `Date of update`, `Pcs`, `Minifigures in set`, `Instruction`, `Box`, `Comment`.
-- Колонки с ценой покупки, курсом и датой покупки на сайте не показываются.
+- Колонки с ценой покупки, курсом и датой покупки в API не передаются.
 
 Настройки (ID таблицы, gid листа, валюта) — в начале `app.js`, объект `CONFIG`.
 

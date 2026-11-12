@@ -3,6 +3,9 @@
   'use strict';
 
   const CONFIG = {
+    // URL веб-приложения Google Apps Script (apps-script/Code.gs): таблица остаётся приватной
+    apiUrl: 'https://script.google.com/macros/s/AKfycbwzN0VywjKz71GJrPJcM0DTfP5zHg3VwRyQTiVi54S13Ig6mpeEPqpjKn7N56pd05BZ/exec',
+    // Запасной вариант, если apiUrl пуст: таблица должна быть открыта «всем, у кого есть ссылка»
     sheetId: '1kcXDNkNGZQBX0QCm13GXOpKN0dYYLC2aKXu1_mah4Ho',
     gid: '786177254',
     currency: '₴',            // валюта колонок «Price on BrickLink / BrickOwl»
@@ -101,6 +104,30 @@
     return parseCSV(text);
   }
 
+  const hasApi = () => /^https:\/\/script\.google(usercontent)?\.com\//.test(CONFIG.apiUrl);
+  const apiUrl = (extra = '') => CONFIG.apiUrl + (CONFIG.apiUrl.includes('?') ? '&' : '?') + '_=' + Date.now() + extra;
+
+  async function fetchApi() {
+    const res = await fetch(apiUrl(), { cache: 'no-store', redirect: 'follow' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    return [data.header, ...data.rows];
+  }
+
+  // Запасной путь без CORS: JSONP
+  function fetchApiJsonp() {
+    return new Promise((resolve, reject) => {
+      const cb = '__legoApi' + Date.now();
+      const s = document.createElement('script');
+      const timer = setTimeout(() => { cleanup(); reject(new Error('Таймаут загрузки данных')); }, 25000);
+      function cleanup() { clearTimeout(timer); delete window[cb]; s.remove(); }
+      window[cb] = (data) => { cleanup(); data && data.rows ? resolve([data.header, ...data.rows]) : reject(new Error('Пустой ответ API')); };
+      s.src = apiUrl('&callback=' + cb);
+      s.onerror = () => { cleanup(); reject(new Error('Не удалось загрузить данные')); };
+      document.head.appendChild(s);
+    });
+  }
+
   // Запасной путь без CORS: JSONP-ответ Google Visualization API
   function fetchJsonp() {
     return new Promise((resolve, reject) => {
@@ -191,7 +218,11 @@
     renderSync('Обновляю…');
     try {
       let rows;
-      try { rows = await fetchCsv(); } catch (e) { rows = await fetchJsonp(); }
+      if (hasApi()) {
+        try { rows = await fetchApi(); } catch (e) { console.warn(e); rows = await fetchApiJsonp(); }
+      } else {
+        try { rows = await fetchCsv(); } catch (e) { rows = await fetchJsonp(); }
+      }
       const items = toItems(rows);
       const signature = JSON.stringify(rows);
       state.loadedAt = Date.now();
@@ -408,7 +439,7 @@
       <article class="product">
         <div class="gallery">
           <div class="gallery__main">
-            <img id="mainImg" src="${esc(photos[0])}" alt="${esc(it.name)}" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${PLACEHOLDER}'">
+            <img id="mainImg" src="${esc(photos[0])}" alt="${esc(it.name)}" referrerpolicy="no-referrer">
             ${photos.length > 1 ? '<button class="gallery__nav gallery__nav--prev" type="button" aria-label="Предыдущее фото">‹</button><button class="gallery__nav gallery__nav--next" type="button" aria-label="Следующее фото">›</button>' : ''}
           </div>
           ${photos.length > 1 ? `
@@ -461,6 +492,7 @@
       </article>`;
 
     if (!keepScroll) window.scrollTo({ top: 0, behavior: 'instant' });
+    $('#mainImg').addEventListener('error', (e) => { if (e.target.src !== PLACEHOLDER) e.target.src = PLACEHOLDER; });
     if (photos.length < 2) return;
 
     let cur = 0;
