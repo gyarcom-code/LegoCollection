@@ -466,7 +466,8 @@
       <article class="product">
         <div class="gallery">
           <div class="gallery__main">
-            <img id="mainImg" src="${esc(photos[0])}" alt="${esc(it.name)}" referrerpolicy="no-referrer">
+            <img id="mainImg" src="${esc(photos[0])}" alt="${esc(it.name)}" referrerpolicy="no-referrer" title="Открыть на весь экран">
+            <span class="gallery__zoom" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h6v2H6v4H4V4Zm10 0h6v6h-2V6h-4V4ZM4 14h2v4h4v2H4v-6Zm14 0h2v6h-6v-2h4v-4Z"/></svg></span>
             ${photos.length > 1 ? '<button class="gallery__nav gallery__nav--prev" type="button" aria-label="Предыдущее фото">‹</button><button class="gallery__nav gallery__nav--next" type="button" aria-label="Следующее фото">›</button>' : ''}
           </div>
           ${photos.length > 1 ? `
@@ -519,33 +520,118 @@
       </article>`;
 
     if (!keepScroll) window.scrollTo({ top: 0, behavior: 'instant' });
-    $('#mainImg').addEventListener('error', (e) => { if (e.target.src !== PLACEHOLDER) e.target.src = PLACEHOLDER; });
-    if (photos.length < 2) return;
+    const mainImg = $('#mainImg');
+    mainImg.addEventListener('error', () => { if (mainImg.src !== PLACEHOLDER) mainImg.src = PLACEHOLDER; });
 
     let cur = 0;
-    const mainImg = $('#mainImg');
     const track = $('#track');
-    const thumbs = [...track.querySelectorAll('.thumb')];
+    const thumbs = track ? [...track.querySelectorAll('.thumb')] : [];
     const show = (i) => {
       cur = (i + photos.length) % photos.length;
       mainImg.src = photos[cur];
       thumbs.forEach((t, k) => t.classList.toggle('active', k === cur));
       const t = thumbs[cur];
-      track.scrollTo({ left: t.offsetLeft - track.clientWidth / 2 + t.clientWidth / 2 });
+      if (t) track.scrollTo({ left: t.offsetLeft - track.clientWidth / 2 + t.clientWidth / 2 });
+      if (lightbox.isOpen()) lightbox.update(photos, cur, it.name);
     };
-    track.addEventListener('click', (e) => { const t = e.target.closest('.thumb'); if (t) show(+t.dataset.i); });
-    content.querySelectorAll('.carousel__btn').forEach((b) => b.addEventListener('click', () => track.scrollBy({ left: +b.dataset.dir * track.clientWidth * 0.8 })));
-    $('.gallery__nav--prev').onclick = () => show(cur - 1);
-    $('.gallery__nav--next').onclick = () => show(cur + 1);
+
+    // Клик по главному фото — просмотр на весь экран
+    mainImg.addEventListener('click', () => lightbox.open(photos, cur, it.name, show));
+
+    if (photos.length > 1) {
+      track.addEventListener('click', (e) => { const t = e.target.closest('.thumb'); if (t) show(+t.dataset.i); });
+      content.querySelectorAll('.carousel__btn').forEach((b) => b.addEventListener('click', () => track.scrollBy({ left: +b.dataset.dir * track.clientWidth * 0.8 })));
+      $('.gallery__nav--prev').onclick = () => show(cur - 1);
+      $('.gallery__nav--next').onclick = () => show(cur + 1);
+    }
     keyHandler = (e) => {
-      if (document.activeElement === searchEl) return;
+      if (document.activeElement === searchEl || photos.length < 2) return;
       if (e.key === 'ArrowLeft') show(cur - 1);
       if (e.key === 'ArrowRight') show(cur + 1);
     };
   }
 
+  /* ---------- Lightbox (полноэкранный просмотр) ---------- */
+  const lightbox = (() => {
+    const el = document.createElement('div');
+    el.className = 'lightbox';
+    el.hidden = true;
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-modal', 'true');
+    el.setAttribute('aria-label', 'Просмотр фото');
+    el.innerHTML = `
+      <div class="lightbox__top">
+        <span class="lightbox__title"></span>
+        <span class="lightbox__count"></span>
+        <button type="button" class="lightbox__close" aria-label="Закрыть">×</button>
+      </div>
+      <div class="lightbox__stage">
+        <button type="button" class="lightbox__nav lightbox__nav--prev" aria-label="Предыдущее фото">‹</button>
+        <img class="lightbox__img" alt="" referrerpolicy="no-referrer">
+        <button type="button" class="lightbox__nav lightbox__nav--next" aria-label="Следующее фото">›</button>
+      </div>
+      <div class="lightbox__thumbs"></div>`;
+    document.body.appendChild(el);
+    const img = el.querySelector('.lightbox__img');
+    const thumbsEl = el.querySelector('.lightbox__thumbs');
+    let photos = [], idx = 0, onChange = null, open = false, touchX = null;
+
+    function render(rebuildThumbs) {
+      img.src = photos[idx];
+      el.querySelector('.lightbox__count').textContent = photos.length > 1 ? `${idx + 1} / ${photos.length}` : '';
+      el.classList.toggle('lightbox--single', photos.length < 2);
+      if (rebuildThumbs) {
+        thumbsEl.innerHTML = photos.length > 1 ? photos.map((p, i) => `<button type="button" data-i="${i}" aria-label="Фото ${i + 1}"><img src="${esc(p)}" alt="" loading="lazy" referrerpolicy="no-referrer"></button>`).join('') : '';
+      }
+      thumbsEl.querySelectorAll('button').forEach((b, i) => b.classList.toggle('active', i === idx));
+      const a = thumbsEl.querySelector('.active');
+      if (a) thumbsEl.scrollTo({ left: a.offsetLeft - thumbsEl.clientWidth / 2 + a.clientWidth / 2 });
+    }
+    function go(d) { if (photos.length < 2) return; onChange ? onChange(idx + d) : (idx = (idx + d + photos.length) % photos.length, render()); }
+    function close() {
+      if (!open) return;
+      open = false; el.hidden = true; document.body.classList.remove('no-scroll');
+    }
+
+    el.querySelector('.lightbox__close').onclick = close;
+    el.querySelector('.lightbox__nav--prev').onclick = () => go(-1);
+    el.querySelector('.lightbox__nav--next').onclick = () => go(1);
+    el.querySelector('.lightbox__stage').addEventListener('click', (e) => { if (e.target.classList.contains('lightbox__stage')) close(); });
+    thumbsEl.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) go(+b.dataset.i - idx); });
+    img.addEventListener('error', () => { if (img.src !== PLACEHOLDER) img.src = PLACEHOLDER; });
+    el.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+    el.addEventListener('touchend', (e) => {
+      if (touchX == null) return;
+      const dx = e.changedTouches[0].clientX - touchX; touchX = null;
+      if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+    });
+
+    return {
+      isOpen: () => open,
+      open(list, i, title, change) {
+        photos = list; idx = i; onChange = change || null; open = true;
+        el.querySelector('.lightbox__title').textContent = title || '';
+        el.hidden = false; document.body.classList.add('no-scroll');
+        render(true);
+        el.querySelector('.lightbox__close').focus();
+      },
+      update(list, i) { photos = list; idx = i; render(); },
+      close,
+      key(e) {
+        if (!open) return false;
+        if (e.key === 'Escape') close();
+        else if (e.key === 'ArrowLeft') go(-1);
+        else if (e.key === 'ArrowRight') go(1);
+        else return false;
+        e.preventDefault();
+        return true;
+      },
+    };
+  })();
+
   let keyHandler = null;
   document.addEventListener('keydown', (e) => {
+    if (lightbox.key(e)) return;
     if (e.key === 'Escape') closeSidebar();
     if (keyHandler && parseHash().view === 'set') keyHandler(e);
   });
@@ -571,7 +657,7 @@
   backdrop.onclick = closeSidebar;
 
   /* ---------- Start ---------- */
-  window.addEventListener('hashchange', () => { keyHandler = null; route(); });
+  window.addEventListener('hashchange', () => { keyHandler = null; lightbox.close(); route(); });
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible' && Date.now() - state.loadedAt > CONFIG.focusRefreshMs) load({ silent: true });
   });
