@@ -108,7 +108,8 @@
   const apiUrl = (extra = '') => CONFIG.apiUrl + (CONFIG.apiUrl.includes('?') ? '&' : '?') + '_=' + Date.now() + extra;
 
   async function fetchApi() {
-    const res = await fetch(apiUrl(), { cache: 'no-store', redirect: 'follow' });
+    // credentials: 'omit' — запрос как от анонимного посетителя (без cookies Google)
+    const res = await fetch(apiUrl(), { cache: 'no-store', redirect: 'follow', credentials: 'omit' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     return [data.header, ...data.rows];
@@ -219,8 +220,7 @@
     try {
       let rows;
       if (hasApi()) {
-        // JSONP надёжнее fetch: Apps Script не всегда отдаёт CORS-заголовки (напр. при входе в несколько Google-аккаунтов)
-        try { rows = await fetchApiJsonp(); } catch (e) { console.warn(e); rows = await fetchApi(); }
+        try { rows = await fetchApi(); } catch (e) { console.warn(e); rows = await fetchApiJsonp(); }
       } else {
         try { rows = await fetchCsv(); } catch (e) { rows = await fetchJsonp(); }
       }
