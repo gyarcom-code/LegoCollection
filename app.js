@@ -152,7 +152,14 @@
     year: '', // фильтр по году ('' — все, 'none' — без года)
     openNodes: new Set(),
     signature: '',
+    // свёрнутые блоки боковой панели (запоминаются в браузере)
+    collapsed: (() => { try { return JSON.parse(localStorage.getItem('lc-collapsed')) || {}; } catch (e) { return {}; } })(),
   };
+  const CHEV = '<svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4z"/></svg>';
+  function setCollapsed(block, value) {
+    state.collapsed[block] = value;
+    store.set('lc-collapsed', JSON.stringify(state.collapsed));
+  }
 
   /* ---------- Utils ---------- */
   const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -457,9 +464,13 @@
   /* ---------- Years block ---------- */
   function renderYears(counts, total) {
     const keys = [...counts.keys()].sort((a, b) => (a === 'none') - (b === 'none') || b.localeCompare(a));
+    const open = !state.collapsed.years;
+    yearsEl.classList.toggle('years--open', open);
     yearsEl.innerHTML = `
       <div class="years__head">
-        <h2>${esc(t('years'))}</h2>
+        <button type="button" class="block-toggle" id="yearsToggle" aria-expanded="${open}">
+          <h2>${esc(t('years'))}${state.year ? `: <span class="years__current">${esc(state.year === 'none' ? t('yearNone') : state.year)}</span>` : ''}</h2>${CHEV}
+        </button>
         ${state.year ? `<button type="button" class="years__reset" data-year="">${esc(t('allYears'))}</button>` : ''}
       </div>
       <div class="years__list">
@@ -469,6 +480,14 @@
   }
 
   yearsEl.addEventListener('click', (e) => {
+    const tg = e.target.closest('#yearsToggle');
+    if (tg) {
+      const open = tg.getAttribute('aria-expanded') !== 'true';
+      setCollapsed('years', !open);
+      tg.setAttribute('aria-expanded', String(open));
+      yearsEl.classList.toggle('years--open', open);
+      return;
+    }
     const b = e.target.closest('[data-year]');
     if (!b) return;
     state.year = b.dataset.year;
@@ -825,6 +844,16 @@
   toggle.onclick = openSidebar;
   $('#treeClose').onclick = closeSidebar;
   backdrop.onclick = closeSidebar;
+
+  /* ---------- Collapsible categories ---------- */
+  const catsToggle = $('#catsToggle');
+  function applyCatsCollapsed() {
+    const open = !state.collapsed.cats;
+    catsToggle.setAttribute('aria-expanded', String(open));
+    sidebar.classList.toggle('cats-collapsed', !open);
+  }
+  catsToggle.addEventListener('click', () => { setCollapsed('cats', !state.collapsed.cats); applyCatsCollapsed(); });
+  applyCatsCollapsed();
 
   /* ---------- Back to top ---------- */
   toTopEl.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
