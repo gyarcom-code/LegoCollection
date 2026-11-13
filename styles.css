@@ -157,6 +157,8 @@ img { display: block; }
 .tree__count { color: var(--muted); font-weight: 600; font-size: 13px; }
 .tree__link.active .tree__count { color: var(--ink); }
 .tree__all { padding-left: 12px; }
+/* второй раздел дерева (мініфігурки) — под наборами, через разделитель */
+.tree__section + .tree__section { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); }
 /* ---------- Years ---------- */
 .years:empty { display: none; }
 .years__current { color: var(--yellow); text-transform: none; }

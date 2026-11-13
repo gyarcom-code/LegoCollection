@@ -21,13 +21,13 @@
       allSets: 'Усі набори', noCategory: 'Без категорії',
       loading: 'Завантажую колекцію з таблиці…', loadError: 'Не вдалося завантажити колекцію.', retry: 'Повторити',
       updating: 'Оновлюю…', updateError: 'Помилка оновлення', synced: 'Синхронізовано о {t}', refresh: 'Оновити',
-      categories: 'Категорії', close: 'Закрити', searchPh: 'Пошук за назвою або номером набору', home: 'На головну',
+      categories: 'Категорії', close: 'Закрити', searchPh: 'Пошук за назвою або номером', home: 'На головну',
       footer: 'Дані беруться напряму з Google Таблиці під час кожного відкриття сторінки. LEGO® — торговельна марка LEGO Group; сайт не пов’язаний з LEGO Group.',
       sortLabel: 'Сортування', sort_default: 'Як у таблиці', sort_name: 'За назвою', sort_number: 'За номером',
       sort_yearDesc: 'Рік: спочатку новіші', sort_yearAsc: 'Рік: спочатку старіші', sort_priceDesc: 'Спочатку дорогі',
       sort_priceAsc: 'Спочатку дешеві', sort_pcsDesc: 'Більше деталей',
       conditionLabel: 'Стан:', all: 'Усі', sets: ['набір', 'набори', 'наборів'], byQuery: ' за запитом «{q}»', searchAll: 'шукати в усіх',
-      nothingFound: 'Нічого не знайдено. Спробуйте інший запит або категорію.', noneInFilter: 'Немає наборів за обраними фільтрами.', resetFilters: 'Скинути фільтри',
+      nothingFound: 'Нічого не знайдено. Спробуйте інший запит або категорію.', noneInFilter: 'Нічого немає за обраними фільтрами.', resetFilters: 'Скинути фільтри',
       cond_new_sealed: 'Новий, запечатаний', cond_new: 'Новий', cond_used_complete: 'Вживаний, повний', cond_used_incomplete: 'Вживаний, неповний', cond_none: 'Не вказано',
       back: '← До каталогу', setNo: 'Набір №', year: 'Рік', pieces: 'Деталей', minifigs: 'Чоловічків',
       conditionTitle: 'Стан', notSpecified: 'не вказано', completeness: 'Комплектація', instruction: 'Інструкція', box: 'Коробка',
@@ -41,19 +41,20 @@
       lots: 'Позицій', piecesTotal: 'Деталей', have: 'Є', missing: 'Немає', partsSearch: 'Пошук деталі за назвою або номером',
       partsNothing: 'Нічого не знайдено.', partId: 'Номер', qtyShort: 'шт.', availUnknown: 'Не вказано',
       filters: 'Фільтри', condition: 'Стан', showN: 'Показати {n}', resetAll: 'Скинути все',
+      allFigs: 'Усі мініфігурки', figNo: 'Мініфігурка №', figs: ['мініфігурка', 'мініфігурки', 'мініфігурок'], cond_used: 'Вживаний',
     },
     en: {
       htmlLang: 'en', locale: 'en-GB', title: 'Lego Collection — catalog',
       allSets: 'All sets', noCategory: 'No category',
       loading: 'Loading the collection from the sheet…', loadError: 'Couldn’t load the collection.', retry: 'Retry',
       updating: 'Updating…', updateError: 'Update failed', synced: 'Synced at {t}', refresh: 'Refresh',
-      categories: 'Categories', close: 'Close', searchPh: 'Search by set name or number', home: 'Home',
+      categories: 'Categories', close: 'Close', searchPh: 'Search by name or number', home: 'Home',
       footer: 'Data is loaded directly from a Google Sheet every time the page opens. LEGO® is a trademark of the LEGO Group; this site is not affiliated with the LEGO Group.',
       sortLabel: 'Sort by', sort_default: 'As in the sheet', sort_name: 'Name', sort_number: 'Set number',
       sort_yearDesc: 'Year: newest first', sort_yearAsc: 'Year: oldest first', sort_priceDesc: 'Price: high to low',
       sort_priceAsc: 'Price: low to high', sort_pcsDesc: 'Most pieces',
       conditionLabel: 'Condition:', all: 'All', sets: ['set', 'sets'], byQuery: ' for “{q}”', searchAll: 'search everywhere',
-      nothingFound: 'Nothing found. Try another search or category.', noneInFilter: 'No sets match the selected filters.', resetFilters: 'Reset filters',
+      nothingFound: 'Nothing found. Try another search or category.', noneInFilter: 'Nothing matches the selected filters.', resetFilters: 'Reset filters',
       cond_new_sealed: 'New, sealed', cond_new: 'New', cond_used_complete: 'Used, complete', cond_used_incomplete: 'Used, incomplete', cond_none: 'Not specified',
       back: '← Back to catalog', setNo: 'Set #', year: 'Year', pieces: 'Pieces', minifigs: 'Minifigures',
       conditionTitle: 'Condition', notSpecified: 'not specified', completeness: 'Contents', instruction: 'Instructions', box: 'Box',
@@ -67,19 +68,20 @@
       lots: 'Lots', piecesTotal: 'Pieces', have: 'Have', missing: 'Missing', partsSearch: 'Search parts by name or number',
       partsNothing: 'Nothing found.', partId: 'Part', qtyShort: 'pcs', availUnknown: 'Not specified',
       filters: 'Filters', condition: 'Condition', showN: 'Show {n}', resetAll: 'Reset all',
+      allFigs: 'All minifigures', figNo: 'Minifigure #', figs: ['minifigure', 'minifigures'], cond_used: 'Used',
     },
     ru: {
       htmlLang: 'ru', locale: 'ru-RU', title: 'Lego Collection — каталог',
       allSets: 'Все наборы', noCategory: 'Без категории',
       loading: 'Загружаю коллекцию из таблицы…', loadError: 'Не удалось загрузить коллекцию.', retry: 'Повторить',
       updating: 'Обновляю…', updateError: 'Ошибка обновления', synced: 'Синхронизировано в {t}', refresh: 'Обновить',
-      categories: 'Категории', close: 'Закрыть', searchPh: 'Поиск по названию или номеру набора', home: 'На главную',
+      categories: 'Категории', close: 'Закрыть', searchPh: 'Поиск по названию или номеру', home: 'На главную',
       footer: 'Данные берутся напрямую из Google Таблицы при каждом открытии страницы. LEGO® — товарный знак LEGO Group; сайт не связан с LEGO Group.',
       sortLabel: 'Сортировка', sort_default: 'Как в таблице', sort_name: 'По названию', sort_number: 'По номеру',
       sort_yearDesc: 'Год: сначала новее', sort_yearAsc: 'Год: сначала старее', sort_priceDesc: 'Сначала дорогие',
       sort_priceAsc: 'Сначала дешёвые', sort_pcsDesc: 'Больше деталей',
       conditionLabel: 'Состояние:', all: 'Все', sets: ['набор', 'набора', 'наборов'], byQuery: ' по запросу «{q}»', searchAll: 'искать во всех',
-      nothingFound: 'Ничего не найдено. Попробуйте другой запрос или категорию.', noneInFilter: 'Нет наборов по выбранным фильтрам.', resetFilters: 'Сбросить фильтры',
+      nothingFound: 'Ничего не найдено. Попробуйте другой запрос или категорию.', noneInFilter: 'Ничего нет по выбранным фильтрам.', resetFilters: 'Сбросить фильтры',
       cond_new_sealed: 'Новый, запечатан', cond_new: 'Новый', cond_used_complete: 'Б/у, полный', cond_used_incomplete: 'Б/у, неполный', cond_none: 'Не указано',
       back: '← К каталогу', setNo: 'Набор №', year: 'Год', pieces: 'Деталей', minifigs: 'Человечков',
       conditionTitle: 'Состояние', notSpecified: 'не указано', completeness: 'Комплектация', instruction: 'Инструкция', box: 'Коробка',
@@ -93,6 +95,7 @@
       lots: 'Позиций', piecesTotal: 'Деталей', have: 'Есть', missing: 'Нет', partsSearch: 'Поиск детали по названию или номеру',
       partsNothing: 'Ничего не найдено.', partId: 'Номер', qtyShort: 'шт.', availUnknown: 'Не указано',
       filters: 'Фильтры', condition: 'Состояние', showN: 'Показать {n}', resetAll: 'Сбросить всё',
+      allFigs: 'Все минифигурки', figNo: 'Минифигурка №', figs: ['минифигурка', 'минифигурки', 'минифигурок'], cond_used: 'Б/у',
     },
   };
   const store = {
@@ -105,8 +108,8 @@
     if (vars && typeof s === 'string') for (const [k, v] of Object.entries(vars)) s = s.replace(`{${k}}`, v);
     return s;
   };
-  function plural(n) {
-    const f = t('sets');
+  function plural(n, kind = 'set') {
+    const f = t(kind === 'fig' ? 'figs' : 'sets');
     if (f.length === 2) return n === 1 ? f[0] : f[1];
     const m10 = n % 10, m100 = n % 100;
     if (m10 === 1 && m100 !== 11) return f[0];
@@ -116,8 +119,8 @@
 
   // Колонки ищутся по заголовку, поэтому порядок в таблице можно менять
   const COLUMNS = {
-    id: ['set id', 'id', 'номер'],
-    name: ['set name', 'name', 'название'],
+    id: ['set id', 'minifigure id', 'id', 'номер'],
+    name: ['set name', 'minifigure name', 'name', 'название'],
     condition: ['condition', 'состояние'],
     category: ['category/seria', 'category', 'категория'],
     mainPhoto: ['main photo', 'главное фото'],
@@ -138,6 +141,7 @@
   const CONDITIONS = {
     'new (sealed)': { key: 'cond_new_sealed', cls: 'new' },
     'new': { key: 'cond_new', cls: 'new' },
+    'used': { key: 'cond_used', cls: 'used' },
     'used (complete)': { key: 'cond_used_complete', cls: 'used' },
     'used (incomplete)': { key: 'cond_used_incomplete', cls: 'incomplete' },
   };
@@ -155,9 +159,13 @@
   const toTopEl = $('#toTop');
 
   const state = {
-    items: [],
+    items: [],      // наборы
+    figs: [],       // минифигурки
     byUid: new Map(),
-    tree: null,
+    figByUid: new Map(),
+    tree: null,     // { set, fig }
+    listKind: '',   // какой раздел сейчас в списке: 'set' | 'fig'
+    listCat: '',
     loadedAt: 0,
     loading: false,
     syncMsg: '',
@@ -228,7 +236,8 @@
     const res = await fetch(apiUrl(), { cache: 'no-store', redirect: 'follow', credentials: 'omit' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
-    return [data.header, ...data.rows];
+    if (!data || !data.rows) throw new Error('Empty API response');
+    return data;
   }
 
   // Произвольный запрос к API: сначала fetch без cookies, затем JSONP
@@ -259,7 +268,7 @@
       const s = document.createElement('script');
       const timer = setTimeout(() => { cleanup(); reject(new Error('Timeout')); }, 25000);
       function cleanup() { clearTimeout(timer); delete window[cb]; s.remove(); }
-      window[cb] = (data) => { cleanup(); data && data.rows ? resolve([data.header, ...data.rows]) : reject(new Error('Empty API response')); };
+      window[cb] = (data) => { cleanup(); data && data.rows ? resolve(data) : reject(new Error('Empty API response')); };
       s.src = apiUrl('&callback=' + cb);
       s.onerror = () => { cleanup(); reject(new Error('Network error')); };
       document.head.appendChild(s);
@@ -287,7 +296,7 @@
     });
   }
 
-  function toItems(rows) {
+  function toItems(rows, kind = 'set') {
     const header = (rows[0] || []).map(norm);
     const idx = {};
     for (const [key, names] of Object.entries(COLUMNS)) {
@@ -309,13 +318,16 @@
 
       const main = get('mainPhoto');
       const extra = get('photos').split(/[;\n]+/).map((s) => s.trim()).filter(isUrl);
-      const photos = [...new Set([main, ...extra].filter(isUrl))];
+      // у минифигурки одно фото (главное), у набора — главное + дополнительные
+      const photos = kind === 'fig'
+        ? [isUrl(main) ? main : extra[0]].filter(Boolean)
+        : [...new Set([main, ...extra].filter(isUrl))];
       const catPath = get('category').split('>').map((s) => s.trim()).filter(Boolean);
       const year = get('year');
       const ym = year.match(/\b(19|20)\d{2}\b/);
 
       items.push({
-        uid, id, name, rowIndex,
+        kind, uid, id, name, rowIndex,
         condition: get('condition'),
         catPath: catPath.length ? catPath : [NO_CAT],
         photos,
@@ -358,20 +370,26 @@
     state.loading = true;
     renderSync('updating');
     try {
-      let rows;
+      let rows, figRows = [];
       if (hasApi()) {
-        try { rows = await fetchApi(); } catch (e) { console.warn(e); rows = await fetchApiJsonp(); }
+        let data;
+        try { data = await fetchApi(); } catch (e) { console.warn(e); data = await fetchApiJsonp(); }
+        rows = [data.header, ...data.rows];
+        if (data.minifigs && data.minifigs.rows) figRows = [data.minifigs.header, ...data.minifigs.rows];
       } else {
         try { rows = await fetchCsv(); } catch (e) { rows = await fetchJsonp(); }
       }
-      const items = toItems(rows);
-      const signature = JSON.stringify(rows);
+      const signature = JSON.stringify([rows, figRows]);
       state.loadedAt = Date.now();
       if (signature !== state.signature) {
+        const items = toItems(rows, 'set');
+        const figs = toItems(figRows, 'fig');
         state.signature = signature;
         state.items = items;
+        state.figs = figs;
         state.byUid = new Map(items.map((it) => [it.uid, it]));
-        state.tree = buildTree(items);
+        state.figByUid = new Map(figs.map((it) => [it.uid, it]));
+        state.tree = { set: buildTree(items), fig: buildTree(figs) };
         renderTree();
         route({ keepScroll: silent, refresh: true, data: true });
       }
@@ -398,18 +416,27 @@
 
   /* ---------- Routing (+ запоминание прокрутки списка) ---------- */
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-  function parseHash() {
-    const h = decodeURIComponent(location.hash.replace(/^#\/?/, ''));
+  const parseHash = () => parseHashOf(location.hash);
+  function parseHashOf(hash) {
+    const h = decodeURIComponent(String(hash || '').replace(/^#\/?/, ''));
     if (h.startsWith('set/')) {
       const rest = h.slice(4);
       if (rest.endsWith('/parts')) return { view: 'parts', uid: rest.slice(0, -6) };
       return { view: 'set', uid: rest };
     }
-    if (h.startsWith('c/')) return { view: 'list', cat: h.slice(2) };
-    return { view: 'list', cat: '' };
+    if (h.startsWith('fig/')) return { view: 'fig', uid: h.slice(4) };
+    if (h === 'figs' || h.startsWith('figs/')) {
+      return { view: 'list', kind: 'fig', cat: h.startsWith('figs/c/') ? h.slice(7) : '' };
+    }
+    if (h.startsWith('c/')) return { view: 'list', kind: 'set', cat: h.slice(2) };
+    return { view: 'list', kind: 'set', cat: '' };
   }
-  const catHref = (path) => '#/c/' + encodeURIComponent(path);
+  const rootHref = (kind) => (kind === 'fig' ? '#/figs' : '#/');
+  const catHref = (path, kind = 'set') => (kind === 'fig' ? '#/figs/c/' : '#/c/') + encodeURIComponent(path);
   const setHref = (uid) => '#/set/' + encodeURIComponent(uid);
+  const figHref = (uid) => '#/fig/' + encodeURIComponent(uid);
+  const itemHref = (it) => (it.kind === 'fig' ? figHref(it.uid) : setHref(it.uid));
+  const allLabel = (kind) => t(kind === 'fig' ? 'allFigs' : 'allSets');
   const partsHref = (uid) => '#/set/' + encodeURIComponent(uid) + '/parts';
 
   let lastListHash = '#/';
@@ -431,26 +458,27 @@
         if (data && prevView === 'parts') return; // фоновое обновление каталога не сбрасывает страницу деталей
         if (prevView === 'list') scrollMemo[lastListHash] = listScrollY;
         renderParts(it, keepScroll);
-        markActive(it.catPath.join(' > '), true);
+        markActive('set', it.catPath.join(' > '), true);
         prevView = 'parts';
         return;
       }
     }
-    if (r.view === 'set') {
-      const it = state.byUid.get(r.uid);
+    if (r.view === 'set' || r.view === 'fig') {
+      const it = (r.view === 'fig' ? state.figByUid : state.byUid).get(r.uid);
       if (it) {
         if (prevView === 'list') scrollMemo[lastListHash] = listScrollY;
         renderProduct(it, keepScroll);
-        markActive(it.catPath.join(' > '), true);
-        prevView = 'set';
+        markActive(it.kind, it.catPath.join(' > '), true);
+        prevView = r.view;
         return;
       }
     }
+    const kind = r.kind || 'set';
     const hash = location.hash || '#/';
-    const restore = !refresh && prevView === 'set' && scrollMemo[hash] != null;
+    const restore = !refresh && (prevView === 'set' || prevView === 'fig') && scrollMemo[hash] != null;
     lastListHash = hash;
-    renderList(r.cat || '', keepScroll || restore);
-    markActive(r.cat || '', true);
+    renderList(kind, r.cat || '', keepScroll || restore);
+    markActive(kind, r.cat || '', true);
     if (restore) {
       const y = scrollMemo[hash];
       window.scrollTo({ top: y, behavior: 'instant' });
@@ -464,38 +492,45 @@
   const CARET = '<svg viewBox="0 0 10 10"><path d="M3 1l5 4-5 4z"/></svg>';
   const sortNodes = (m) => [...m.values()].sort((a, b) => (a.name === NO_CAT) - (b.name === NO_CAT) || a.name.localeCompare(b.name, t('locale')));
 
-  function nodeHtml(node) {
+  const nodeKey = (kind, path) => kind + '|' + path;
+
+  function nodeHtml(node, kind) {
     const kids = sortNodes(node.children);
-    const open = state.openNodes.has(node.path) ? ' open' : '';
-    return `<li class="${open.trim()}" data-path="${esc(node.path)}">
+    const open = state.openNodes.has(nodeKey(kind, node.path)) ? ' open' : '';
+    return `<li class="${open.trim()}" data-kind="${kind}" data-path="${esc(node.path)}">
       <div class="tree__row">
         ${kids.length ? `<button class="tree__caret" type="button" aria-label="${esc(t('expand'))}">${CARET}</button>` : '<span class="tree__caret tree__caret--empty"></span>'}
-        <a class="tree__link" href="${catHref(node.path)}" data-path="${esc(node.path)}"><span>${esc(catLabel(node.name))}</span><span class="tree__count">${node.count}</span></a>
+        <a class="tree__link" href="${catHref(node.path, kind)}" data-kind="${kind}" data-path="${esc(node.path)}"><span>${esc(catLabel(node.name))}</span><span class="tree__count">${node.count}</span></a>
       </div>
-      ${kids.length ? `<ul>${kids.map(nodeHtml).join('')}</ul>` : ''}
+      ${kids.length ? `<ul>${kids.map((k) => nodeHtml(k, kind)).join('')}</ul>` : ''}
     </li>`;
   }
 
-  function renderTree() {
-    const tr = state.tree;
-    if (!tr) return;
-    treeEl.innerHTML = `<ul>
-      <li><div class="tree__row tree__all"><a class="tree__link" href="#/" data-path=""><span>${esc(t('allSets'))}</span><span class="tree__count">${tr.count}</span></a></div></li>
-      ${sortNodes(tr.children).map(nodeHtml).join('')}
+  // Раздел дерева: «Усі набори» / «Усі мініфігурки» + их категории
+  function sectionHtml(kind) {
+    const tr = state.tree[kind];
+    return `<ul class="tree__section tree__section--${kind}">
+      <li><div class="tree__row tree__all"><a class="tree__link" href="${rootHref(kind)}" data-kind="${kind}" data-path=""><span>${esc(allLabel(kind))}</span><span class="tree__count">${tr.count}</span></a></div></li>
+      ${sortNodes(tr.children).map((n) => nodeHtml(n, kind)).join('')}
     </ul>`;
   }
 
-  function markActive(path, expand) {
+  function renderTree() {
+    if (!state.tree) return;
+    treeEl.innerHTML = sectionHtml('set') + (state.figs.length ? sectionHtml('fig') : '');
+  }
+
+  function markActive(kind, path, expand) {
     treeEl.querySelectorAll('.tree__link.active').forEach((a) => a.classList.remove('active'));
-    const link = [...treeEl.querySelectorAll('.tree__link')].find((a) => a.dataset.path === path);
+    const link = [...treeEl.querySelectorAll('.tree__link')].find((a) => a.dataset.kind === kind && a.dataset.path === path);
     if (!link) return;
     link.classList.add('active');
     if (expand && path) {
       const parts = path.split(' > ');
       for (let i = 1; i <= parts.length; i++) {
         const p = parts.slice(0, i).join(' > ');
-        state.openNodes.add(p);
-        const li = [...treeEl.querySelectorAll('li[data-path]')].find((el) => el.dataset.path === p);
+        state.openNodes.add(nodeKey(kind, p));
+        const li = [...treeEl.querySelectorAll('li[data-path]')].find((el) => el.dataset.kind === kind && el.dataset.path === p);
         if (li) li.classList.add('open');
       }
     }
@@ -506,8 +541,8 @@
     if (caret) {
       const li = caret.closest('li');
       li.classList.toggle('open');
-      const p = li.dataset.path;
-      li.classList.contains('open') ? state.openNodes.add(p) : state.openNodes.delete(p);
+      const k = nodeKey(li.dataset.kind, li.dataset.path);
+      li.classList.contains('open') ? state.openNodes.add(k) : state.openNodes.delete(k);
       return;
     }
   });
@@ -545,7 +580,7 @@
     if (!b) return;
     state.year = b.dataset.year;
     if (parseHash().view !== 'list') { location.hash = lastListHash; return; }
-    renderList(parseHash().cat || '', true);
+    rerenderList();
   });
 
   /* ---------- Catalog list ---------- */
@@ -576,7 +611,7 @@
   const condMeta = (k) => {
     if (CONDITIONS[k]) return { label: t(CONDITIONS[k].key), cls: CONDITIONS[k].cls };
     if (k === 'none') return { label: t('cond_none'), cls: 'other' };
-    return { label: (state.items.find((it) => condKey(it) === k) || {}).condition || k, cls: 'other' };
+    return { label: ([...state.items, ...state.figs].find((it) => condKey(it) === k) || {}).condition || k, cls: 'other' };
   };
 
   function conditionBadge(c) {
@@ -588,7 +623,7 @@
   function cardHtml(it) {
     const img = it.photos[0] || PLACEHOLDER;
     const price = priceOf(it);
-    return `<a class="card" href="${setHref(it.uid)}">
+    return `<a class="card card--${it.kind}" href="${itemHref(it)}">
       <div class="card__img"><img src="${esc(img)}" alt="${esc(it.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${PLACEHOLDER}'"></div>
       <div class="card__body">
         <div class="card__num">${esc(it.id)}</div>
@@ -599,13 +634,13 @@
     </a>`;
   }
 
-  function crumbsHtml(path, linkLast) {
+  function crumbsHtml(path, linkLast, kind = 'set') {
     if (!path) return '';
     const parts = path.split(' > ');
-    const links = [`<a href="#/">${esc(t('allSets'))}</a>`];
+    const links = [`<a href="${rootHref(kind)}">${esc(allLabel(kind))}</a>`];
     parts.forEach((p, i) => {
       const full = parts.slice(0, i + 1).join(' > ');
-      links.push(i < parts.length - 1 || linkLast ? `<a href="${catHref(full)}">${esc(catLabel(p))}</a>` : esc(catLabel(p)));
+      links.push(i < parts.length - 1 || linkLast ? `<a href="${catHref(full, kind)}">${esc(catLabel(p))}</a>` : esc(catLabel(p)));
     });
     return `<div class="crumbs">${links.join(' › ')}</div>`;
   }
@@ -616,9 +651,24 @@
     return m;
   }
 
-  function renderList(cat, keepScroll) {
+  // Фильтры (состояние, год) у наборов и минифигурок свои: при смене раздела запоминаем и подставляем
+  const filterMemo = {};
+  function switchKind(kind) {
+    if (state.listKind === kind) return;
+    if (state.listKind) filterMemo[state.listKind] = { cond: state.cond, year: state.year };
+    const m = filterMemo[kind] || { cond: '', year: '' };
+    state.cond = m.cond; state.year = m.year;
+    state.listKind = kind;
+  }
+  const sortsFor = (kind) => Object.keys(SORTS).filter((k) => !(kind === 'fig' && k === 'pcsDesc'));
+  const rerenderList = () => renderList(state.listKind || 'set', state.listCat, true);
+
+  function renderList(kind, cat, keepScroll) {
+    switchKind(kind);
+    state.listCat = cat;
     const q = norm(state.query);
-    const base = state.items.filter((it) => inCat(it, cat) && matches(it, q));
+    const source = kind === 'fig' ? state.figs : state.items;
+    const base = source.filter((it) => inCat(it, cat) && matches(it, q));
     const byYear = (it) => !state.year || it.yearKey === state.year;
     const byCond = (it) => !state.cond || condKey(it) === state.cond;
 
@@ -635,23 +685,25 @@
     if (state.year && !years.has(state.year)) years.set(state.year, 0);
     renderYears(years, yearBase.length);
 
-    const list = base.filter((it) => byYear(it) && byCond(it)).sort(SORTS[state.sort] || SORTS.priceDesc);
-    const title = cat ? catLabel(cat.split(' > ').pop()) : t('allSets');
+    const sorts = sortsFor(kind);
+    const sortKey = sorts.includes(state.sort) ? state.sort : 'priceDesc';
+    const list = base.filter((it) => byYear(it) && byCond(it)).sort(SORTS[sortKey]);
+    const title = cat ? catLabel(cat.split(' > ').pop()) : allLabel(kind);
     const extras = [];
     if (state.cond) extras.push(esc(condMeta(state.cond).label.toLowerCase()));
     if (state.year) extras.push(esc(state.year === 'none' ? t('yearNone').toLowerCase() : state.year));
-    const meta = `${list.length} ${plural(list.length)}${extras.length ? ' · ' + extras.join(' · ') : ''}`;
-    const searchNote = q ? `${esc(t('byQuery', { q: state.query }))}${cat ? ` · <a href="#/">${esc(t('searchAll'))}</a>` : ''}` : '';
+    const meta = `${list.length} ${plural(list.length, kind)}${extras.length ? ' · ' + extras.join(' · ') : ''}`;
+    const searchNote = q ? `${esc(t('byQuery', { q: state.query }))}${cat ? ` · <a href="${rootHref(kind)}">${esc(t('searchAll'))}</a>` : ''}` : '';
     const filtered = state.cond || state.year;
     content.innerHTML = `
       <div class="toolbar">
         <div>
-          ${crumbsHtml(cat, false)}
+          ${crumbsHtml(cat, false, kind)}
           <h1>${esc(title)}</h1>
           <div class="toolbar__meta">${meta}${searchNote}</div>
         </div>
         <label class="sort">${esc(t('sortLabel'))}
-          <select id="sort">${Object.keys(SORTS).map((k) => `<option value="${k}"${k === state.sort ? ' selected' : ''}>${esc(t('sort_' + k))}</option>`).join('')}</select>
+          <select id="sort">${sorts.map((k) => `<option value="${k}"${k === sortKey ? ' selected' : ''}>${esc(t('sort_' + k))}</option>`).join('')}</select>
         </label>
       </div>
       <div class="filters" role="group" aria-label="${esc(t('filterCondAria'))}">
@@ -660,16 +712,16 @@
         ${condList.map(([k, n]) => `<button type="button" class="chip chip--${condMeta(k).cls}${state.cond === k ? ' active' : ''}" data-cond="${esc(k)}">${esc(condMeta(k).label)} <span>${n}</span></button>`).join('')}
       </div>
       ${list.length ? `<div class="grid">${list.map(cardHtml).join('')}</div>` : (filtered && base.length ? `<div class="empty">${esc(t('noneInFilter'))} <button type="button" class="link-btn" id="resetFilters">${esc(t('resetFilters'))}</button></div>` : `<div class="empty">${esc(t('nothingFound'))}</div>`)}`;
-    $('#sort').onchange = (e) => { state.sort = e.target.value; renderList(cat, true); };
+    $('#sort').onchange = (e) => { state.sort = e.target.value; rerenderList(); };
     content.querySelectorAll('.chip').forEach((b) => b.addEventListener('click', () => {
       state.cond = b.dataset.cond;
-      renderList(cat, true);
+      rerenderList();
       const bar = content.querySelector('.filters'), chip = content.querySelector('.chip.active');
       if (bar && chip) bar.scrollLeft = chip.offsetLeft - bar.clientWidth / 2 + chip.clientWidth / 2;
     }));
-    renderDrawerExtras(cat, base.filter(byYear).length, condList, list.length);
+    renderDrawerExtras(kind, cat, base.filter(byYear).length, condList, list.length);
     const reset = $('#resetFilters');
-    if (reset) reset.onclick = () => { state.cond = ''; state.year = ''; renderList(cat, true); };
+    if (reset) reset.onclick = () => { state.cond = ''; state.year = ''; rerenderList(); };
     if (!keepScroll) window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
@@ -677,7 +729,7 @@
   const condPanelEl = $('#condPanel');
   const badgeEl = $('#filterBadge');
   const applyEl = $('#drawerApply');
-  function renderDrawerExtras(cat, total, condList, shown) {
+  function renderDrawerExtras(kind, cat, total, condList, shown) {
     condPanelEl.innerHTML = `
       <div class="panel__head"><h2>${esc(t('condition'))}</h2></div>
       <div class="cond-panel__body">
@@ -686,12 +738,12 @@
       </div>`;
     condPanelEl.querySelectorAll('[data-dcond]').forEach((b) => b.addEventListener('click', () => {
       state.cond = b.dataset.dcond;
-      renderList(cat, true);
+      rerenderList();
     }));
     const active = (cat ? 1 : 0) + (state.year ? 1 : 0) + (state.cond ? 1 : 0);
     badgeEl.hidden = !active;
     badgeEl.textContent = active;
-    applyEl.textContent = `${t('showN', { n: shown })} ${plural(shown)}`;
+    applyEl.textContent = `${t('showN', { n: shown })} ${plural(shown, kind)}`;
   }
   applyEl.addEventListener('click', closeSidebar);
 
@@ -712,6 +764,7 @@
   }
 
   function renderProduct(it, keepScroll) {
+    const isFig = it.kind === 'fig';
     const photos = it.photos.length ? it.photos : [PLACEHOLDER];
     const instr = yesNo(it.instruction);
     const box = yesNo(it.box);
@@ -719,8 +772,8 @@
     const catPath = it.catPath.join(' > ');
 
     content.innerHTML = `
-      <a class="back" href="${esc(lastListHash)}">${esc(t('back'))}</a>
-      <article class="product">
+      <a class="back" href="${esc(parseHashOf(lastListHash).kind === it.kind ? lastListHash : rootHref(it.kind))}">${esc(t('back'))}</a>
+      <article class="product product--${it.kind}">
         <div class="gallery">
           <div class="gallery__main">
             <img id="mainImg" src="${esc(photos[0])}" alt="${esc(it.name)}" referrerpolicy="no-referrer" title="${esc(t('fullscreen'))}">
@@ -739,15 +792,15 @@
 
         <div class="info">
           <div>
-            <div class="info__num">${esc(t('setNo'))} ${esc(it.id)}</div>
+            <div class="info__num">${esc(t(isFig ? 'figNo' : 'setNo'))} ${esc(it.id)}</div>
             <h1>${esc(it.name)}</h1>
-            <div class="info__cat">${crumbsHtml(catPath, true).replace('class="crumbs"', 'class="crumbs" style="margin:0"')}</div>
+            <div class="info__cat">${crumbsHtml(catPath, true, it.kind).replace('class="crumbs"', 'class="crumbs" style="margin:0"')}</div>
           </div>
 
-          <div class="facts">
+          <div class="facts${isFig ? ' facts--fig' : ''}">
             ${fact(t('year'), it.year)}
-            <a class="fact fact--link" href="${partsHref(it.uid)}"><div class="fact__label">${esc(t('pieces'))}</div><div class="fact__value">${esc(it.pcs || '—')}</div><div class="fact__more">${esc(t('partsLink'))} →</div></a>
-            ${fact(t('minifigs'), it.minifigs)}
+            ${isFig ? '' : `<a class="fact fact--link" href="${partsHref(it.uid)}"><div class="fact__label">${esc(t('pieces'))}</div><div class="fact__value">${esc(it.pcs || '—')}</div><div class="fact__more">${esc(t('partsLink'))} →</div></a>
+            ${fact(t('minifigs'), it.minifigs)}`}
           </div>
 
           <div>
@@ -755,13 +808,13 @@
             ${conditionBadge(it.condition) || `<span class="updated">${esc(t('notSpecified'))}</span>`}
           </div>
 
-          <div>
+          ${isFig ? '' : `<div>
             <h2 class="section-title">${esc(t('completeness'))}</h2>
             <div class="checks">
               <span class="check check--${instr.cls}"><span class="check__icon">${instr.icon}</span>${esc(t('instruction'))}: ${esc(instr.text)}</span>
               <span class="check check--${box.cls}"><span class="check__icon">${box.icon}</span>${esc(t('box'))}: ${esc(box.text)}</span>
             </div>
-          </div>
+          </div>`}
 
           <div>
             <h2 class="section-title">${esc(t('prices'))}</h2>
@@ -1015,8 +1068,8 @@
     searchTimer = setTimeout(() => {
       state.query = searchEl.value.trim();
       const r = parseHash();
-      if (r.view === 'set' || r.view === 'parts') { location.hash = lastListHash; return; }
-      renderList(r.cat || '', true);
+      if (r.view !== 'list') { location.hash = lastListHash; return; }
+      renderList(r.kind, r.cat || '', true);
     }, 120);
   });
 

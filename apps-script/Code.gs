@@ -4,18 +4,25 @@
  * Таблица остаётся приватной; наружу уходят только колонки из PUBLIC_COLUMNS / PARTS_COLUMNS.
  * Развёртывание: «Начать развертывание» → «Веб-приложение», запуск от «Меня», доступ «Все».
  *
- *   ?               — каталог наборов (лист «Lego sets»)
+ *   ?               — каталог наборов (лист «Lego sets») + minifigs (лист «Lego Minifigures»)
  *   ?parts=<SetID>  — детали набора (лист «Parts»)
  *   &callback=fn    — JSONP
  */
 const SHEET_GID = 786177254;
 const PARTS_GID = 1295143301;
+const MINIFIG_GID = 656934717;
 
 const PUBLIC_COLUMNS = [
   'Set ID', 'Set Name', 'Condition', 'Category/Seria', 'Main Photo', 'Photos ;',
   'Creation Date', 'Link to BrickLink', 'Price on BrickLink', 'Link to BrickOwl',
   'Price on BrickOwl', 'Date of update', 'Pcs', 'Minifigures in set',
   'Instruction', 'Box', 'Comment',
+];
+
+const MINIFIG_COLUMNS = [
+  'Minifigure ID', 'Minifigure Name', 'Condition', 'Category/Seria', 'Main Photo', 'Photos ;',
+  'Creation Date', 'Link to BrickLink', 'Price on BrickLink', 'Link to BrickOwl',
+  'Price on BrickOwl', 'Date of update', 'Comment',
 ];
 
 const PARTS_COLUMNS = ['Set ID', 'Part ID', 'Name', 'Image Link', 'Quantity', 'Availability', 'Comment'];
@@ -52,7 +59,17 @@ function pick_(values, columns, keep) {
 function readCollection_() {
   const sheet = sheetByGid_(SHEET_GID) || SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
   const values = sheet.getDataRange().getDisplayValues();
-  return { header: PUBLIC_COLUMNS, rows: pick_(values, PUBLIC_COLUMNS), generatedAt: new Date().toISOString() };
+  return {
+    header: PUBLIC_COLUMNS, rows: pick_(values, PUBLIC_COLUMNS),
+    minifigs: readMinifigs_(),
+    generatedAt: new Date().toISOString(),
+  };
+}
+
+function readMinifigs_() {
+  const sheet = sheetByGid_(MINIFIG_GID);
+  if (!sheet) return { header: MINIFIG_COLUMNS, rows: [] };
+  return { header: MINIFIG_COLUMNS, rows: pick_(sheet.getDataRange().getDisplayValues(), MINIFIG_COLUMNS) };
 }
 
 function readParts_(setId) {
@@ -68,6 +85,7 @@ function readParts_(setId) {
 function testRead() {
   const data = readCollection_();
   Logger.log(data.rows.length + ' rows; first: ' + JSON.stringify(data.rows[0]));
+  Logger.log(data.minifigs.rows.length + ' minifigs; first: ' + JSON.stringify(data.minifigs.rows[0]));
   const parts = readParts_(String(data.rows[0][0]));
   Logger.log(parts.rows.length + ' parts for ' + data.rows[0][0]);
 }
