@@ -57,7 +57,8 @@
 GitHub Pages раздаёт ветку `gh-pages`. После изменений в `main`:
 `git push origin main:gh-pages` (или в Settings → Pages переключите источник на `main`).
 
-После правок `app.js`/`styles.css` поменяйте `?v=…` в `index.html`, чтобы браузеры не брали старую версию из кэша.
+Публикация одной командой: `./deploy.sh "описание"` — проставляет номер сборки в `index.html` и `version.json`
+и пушит в `main` и `gh-pages`. Страница при каждом открытии читает `version.json` без кэша и грузит свежие `app.js`/`styles.css`.
 
 ## Локальный запуск
 
