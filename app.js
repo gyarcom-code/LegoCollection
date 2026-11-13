@@ -36,6 +36,10 @@
       prevPhoto: 'Попереднє фото', nextPhoto: 'Наступне фото', fullscreen: 'Відкрити на весь екран', photoN: 'Фото {n}',
       scrollLeft: 'Прокрутити ліворуч', scrollRight: 'Прокрутити праворуч', viewPhoto: 'Перегляд фото', expand: 'Розгорнути',
       years: 'Рік випуску', allYears: 'Усі роки', yearNone: 'Без року', toTop: 'Нагору', filterCondAria: 'Фільтр за станом', lang: 'Мова',
+      partsLink: 'Список деталей', partsTitle: 'Деталі набору', backToSet: '← До набору', partsLoading: 'Завантажую список деталей…',
+      partsEmpty: 'Список деталей для цього набору ще не заповнено.', partsError: 'Не вдалося завантажити деталі.',
+      lots: 'Позицій', piecesTotal: 'Деталей', have: 'Є', missing: 'Немає', partsSearch: 'Пошук деталі за назвою або номером',
+      partsNothing: 'Нічого не знайдено.', partId: 'Номер', qtyShort: 'шт.', availUnknown: 'Не вказано',
     },
     en: {
       htmlLang: 'en', locale: 'en-GB', title: 'Lego Collection — catalog',
@@ -57,6 +61,10 @@
       prevPhoto: 'Previous photo', nextPhoto: 'Next photo', fullscreen: 'Open fullscreen', photoN: 'Photo {n}',
       scrollLeft: 'Scroll left', scrollRight: 'Scroll right', viewPhoto: 'Photo viewer', expand: 'Expand',
       years: 'Release year', allYears: 'All years', yearNone: 'No year', toTop: 'Back to top', filterCondAria: 'Filter by condition', lang: 'Language',
+      partsLink: 'Parts list', partsTitle: 'Set parts', backToSet: '← Back to set', partsLoading: 'Loading the parts list…',
+      partsEmpty: 'The parts list for this set hasn’t been filled in yet.', partsError: 'Couldn’t load the parts.',
+      lots: 'Lots', piecesTotal: 'Pieces', have: 'Have', missing: 'Missing', partsSearch: 'Search parts by name or number',
+      partsNothing: 'Nothing found.', partId: 'Part', qtyShort: 'pcs', availUnknown: 'Not specified',
     },
     ru: {
       htmlLang: 'ru', locale: 'ru-RU', title: 'Lego Collection — каталог',
@@ -78,6 +86,10 @@
       prevPhoto: 'Предыдущее фото', nextPhoto: 'Следующее фото', fullscreen: 'Открыть на весь экран', photoN: 'Фото {n}',
       scrollLeft: 'Прокрутить влево', scrollRight: 'Прокрутить вправо', viewPhoto: 'Просмотр фото', expand: 'Развернуть',
       years: 'Год выпуска', allYears: 'Все годы', yearNone: 'Без года', toTop: 'Наверх', filterCondAria: 'Фильтр по состоянию', lang: 'Язык',
+      partsLink: 'Список деталей', partsTitle: 'Детали набора', backToSet: '← К набору', partsLoading: 'Загружаю список деталей…',
+      partsEmpty: 'Список деталей для этого набора ещё не заполнен.', partsError: 'Не удалось загрузить детали.',
+      lots: 'Позиций', piecesTotal: 'Деталей', have: 'Есть', missing: 'Нет', partsSearch: 'Поиск детали по названию или номеру',
+      partsNothing: 'Ничего не найдено.', partId: 'Номер', qtyShort: 'шт.', availUnknown: 'Не указано',
     },
   };
   const store = {
@@ -216,6 +228,27 @@
     return [data.header, ...data.rows];
   }
 
+  // Произвольный запрос к API: сначала fetch без cookies, затем JSONP
+  async function apiGet(params) {
+    const qs = Object.entries(params).map(([k, v]) => `&${k}=${encodeURIComponent(v)}`).join('');
+    try {
+      const res = await fetch(apiUrl(qs), { cache: 'no-store', redirect: 'follow', credentials: 'omit' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return await res.json();
+    } catch (e) {
+      return new Promise((resolve, reject) => {
+        const cb = '__legoApi' + Date.now() + Math.floor(Math.random() * 1e4);
+        const s = document.createElement('script');
+        const timer = setTimeout(() => { cleanup(); reject(new Error('Timeout')); }, 25000);
+        function cleanup() { clearTimeout(timer); delete window[cb]; s.remove(); }
+        window[cb] = (data) => { cleanup(); resolve(data); };
+        s.src = apiUrl(qs + '&callback=' + cb);
+        s.onerror = () => { cleanup(); reject(new Error('Network error')); };
+        document.head.appendChild(s);
+      });
+    }
+  }
+
   // Запасной путь без CORS: JSONP
   function fetchApiJsonp() {
     return new Promise((resolve, reject) => {
@@ -337,7 +370,7 @@
         state.byUid = new Map(items.map((it) => [it.uid, it]));
         state.tree = buildTree(items);
         renderTree();
-        route({ keepScroll: silent, refresh: true });
+        route({ keepScroll: silent, refresh: true, data: true });
       }
       renderSync();
     } catch (err) {
@@ -364,12 +397,17 @@
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   function parseHash() {
     const h = decodeURIComponent(location.hash.replace(/^#\/?/, ''));
-    if (h.startsWith('set/')) return { view: 'set', uid: h.slice(4) };
+    if (h.startsWith('set/')) {
+      const rest = h.slice(4);
+      if (rest.endsWith('/parts')) return { view: 'parts', uid: rest.slice(0, -6) };
+      return { view: 'set', uid: rest };
+    }
     if (h.startsWith('c/')) return { view: 'list', cat: h.slice(2) };
     return { view: 'list', cat: '' };
   }
   const catHref = (path) => '#/c/' + encodeURIComponent(path);
   const setHref = (uid) => '#/set/' + encodeURIComponent(uid);
+  const partsHref = (uid) => '#/set/' + encodeURIComponent(uid) + '/parts';
 
   let lastListHash = '#/';
   let prevView = null;
@@ -381,9 +419,20 @@
     toTopEl.classList.toggle('show', window.scrollY > 500);
   }, { passive: true });
 
-  function route({ keepScroll = false, refresh = false } = {}) {
+  function route({ keepScroll = false, refresh = false, data = false } = {}) {
     if (!state.tree) return;
     const r = parseHash();
+    if (r.view === 'parts') {
+      const it = state.byUid.get(r.uid);
+      if (it) {
+        if (data && prevView === 'parts') return; // фоновое обновление каталога не сбрасывает страницу деталей
+        if (prevView === 'list') scrollMemo[lastListHash] = listScrollY;
+        renderParts(it, keepScroll);
+        markActive(it.catPath.join(' > '), true);
+        prevView = 'parts';
+        return;
+      }
+    }
     if (r.view === 'set') {
       const it = state.byUid.get(r.uid);
       if (it) {
@@ -494,7 +543,7 @@
     if (!b) return;
     state.year = b.dataset.year;
     closeSidebar();
-    if (parseHash().view === 'set') { location.hash = lastListHash; return; }
+    if (parseHash().view !== 'list') { location.hash = lastListHash; return; }
     renderList(parseHash().cat || '', true);
   });
 
@@ -673,7 +722,7 @@
 
           <div class="facts">
             ${fact(t('year'), it.year)}
-            ${fact(t('pieces'), it.pcs)}
+            <a class="fact fact--link" href="${partsHref(it.uid)}"><div class="fact__label">${esc(t('pieces'))}</div><div class="fact__value">${esc(it.pcs || '—')}</div><div class="fact__more">${esc(t('partsLink'))} →</div></a>
             ${fact(t('minifigs'), it.minifigs)}
           </div>
 
@@ -733,6 +782,114 @@
       if (e.key === 'ArrowLeft') show(cur - 1);
       if (e.key === 'ArrowRight') show(cur + 1);
     };
+  }
+
+  /* ---------- Parts page (детали набора) ---------- */
+  const partsCache = new Map(); // setId → { rows, loadedAt }
+  const partsState = { filter: '', query: '' };
+
+  function availKey(v) {
+    const y = yesNo(v).cls;
+    return y === 'yes' ? 'have' : y === 'no' ? 'missing' : 'unknown';
+  }
+
+  function toParts(data) {
+    const h = (data.header || []).map(norm);
+    const col = (n) => h.indexOf(n);
+    const iId = col('part id'), iName = col('name'), iImg = col('image link'), iQty = col('quantity'), iAv = col('availability'), iCom = col('comment');
+    return (data.rows || []).map((r, i) => ({
+      i,
+      id: String(r[iId] ?? '').trim(),
+      name: String(r[iName] ?? '').trim(),
+      img: isUrl(r[iImg]) ? String(r[iImg]).trim() : '',
+      qty: num(r[iQty]) ?? 1,
+      avail: availKey(r[iAv]),
+      comment: String(r[iCom] ?? '').trim(),
+    })).filter((p) => p.id || p.name);
+  }
+
+  function partHtml(p) {
+    const icon = p.avail === 'have' ? '✓' : p.avail === 'missing' ? '✕' : '?';
+    const label = p.avail === 'have' ? t('have') : p.avail === 'missing' ? t('missing') : t('availUnknown');
+    return `<div class="part part--${p.avail}">
+      <span class="part__mark" title="${esc(label)}" aria-label="${esc(label)}">${icon}</span>
+      <div class="part__img"><img src="${esc(p.img || PLACEHOLDER)}" alt="${esc(p.name)}" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${PLACEHOLDER}'"></div>
+      <div class="part__body">
+        <div class="part__name">${esc(p.name)}</div>
+        <div class="part__meta"><span>${esc(p.id)}</span><b>× ${p.qty}</b></div>
+        ${p.comment ? `<div class="part__comment">${esc(p.comment)}</div>` : ''}
+      </div>
+    </div>`;
+  }
+
+  function renderPartsBody(it, parts) {
+    const body = $('#partsBody');
+    if (!body) return;
+    if (!parts.length) { body.innerHTML = `<div class="empty">${esc(t('partsEmpty'))}</div>`; return; }
+    const sum = (arr) => arr.reduce((s, p) => s + p.qty, 0);
+    const have = parts.filter((p) => p.avail === 'have');
+    const miss = parts.filter((p) => p.avail === 'missing');
+    const unk = parts.filter((p) => p.avail === 'unknown');
+    const q = norm(partsState.query);
+    const list = parts.filter((p) => (!partsState.filter || p.avail === partsState.filter)
+      && (!q || q.split(/\s+/).every((w) => norm(`${p.id} ${p.name}`).includes(w))));
+    const chip = (key, label, arr, cls) => `<button type="button" class="chip${cls ? ' chip--' + cls : ''}${partsState.filter === key ? ' active' : ''}" data-pf="${key}">${esc(label)} <span>${arr.length}</span></button>`;
+    body.innerHTML = `
+      <div class="parts-stats">
+        <div class="fact"><div class="fact__label">${esc(t('lots'))}</div><div class="fact__value">${parts.length}</div></div>
+        <div class="fact"><div class="fact__label">${esc(t('piecesTotal'))}</div><div class="fact__value">${sum(parts)}</div></div>
+        <div class="fact fact--have"><div class="fact__label">✓ ${esc(t('have'))}</div><div class="fact__value">${sum(have)}</div></div>
+        <div class="fact fact--missing"><div class="fact__label">✕ ${esc(t('missing'))}</div><div class="fact__value">${sum(miss)}</div></div>
+      </div>
+      <div class="parts-tools">
+        <div class="filters">
+          ${chip('', t('all'), parts, '')}
+          ${chip('have', '✓ ' + t('have'), have, 'have')}
+          ${chip('missing', '✕ ' + t('missing'), miss, 'missing')}
+          ${unk.length ? chip('unknown', '? ' + t('availUnknown'), unk, 'unknown') : ''}
+        </div>
+        <input type="search" id="partsSearch" class="parts-search" placeholder="${esc(t('partsSearch'))}" value="${esc(partsState.query)}" autocomplete="off">
+      </div>
+      ${list.length ? `<div class="parts-grid">${list.map(partHtml).join('')}</div>` : `<div class="empty">${esc(t('partsNothing'))}</div>`}`;
+    body.querySelectorAll('[data-pf]').forEach((b) => b.addEventListener('click', () => { partsState.filter = b.dataset.pf; renderPartsBody(it, parts); }));
+    const ps = $('#partsSearch');
+    let timer;
+    ps.addEventListener('input', () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        partsState.query = ps.value;
+        const pos = ps.selectionStart;
+        renderPartsBody(it, parts);
+        const n = $('#partsSearch'); n.focus(); n.setSelectionRange(pos, pos);
+      }, 150);
+    });
+  }
+
+  async function renderParts(it, keepScroll) {
+    partsState.filter = ''; partsState.query = '';
+    content.innerHTML = `
+      <a class="back" href="${setHref(it.uid)}">${esc(t('backToSet'))}</a>
+      <div class="parts-head">
+        <img src="${esc(it.photos[0] || PLACEHOLDER)}" alt="" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${PLACEHOLDER}'">
+        <div>
+          <div class="info__num">${esc(t('setNo'))} ${esc(it.id)}</div>
+          <h1>${esc(t('partsTitle'))}</h1>
+          <div class="parts-head__name">${esc(it.name)}</div>
+        </div>
+      </div>
+      <div id="partsBody"><div class="state"><div class="loader" aria-hidden="true"><span></span><span></span><span></span></div><p>${esc(t('partsLoading'))}</p></div></div>`;
+    if (!keepScroll) window.scrollTo({ top: 0, behavior: 'instant' });
+    const cached = partsCache.get(it.id);
+    if (cached) renderPartsBody(it, cached.rows);
+    try {
+      const data = await apiGet({ parts: it.id });
+      const rows = toParts(data);
+      partsCache.set(it.id, { rows, loadedAt: Date.now() });
+      if (parseHash().view === 'parts' && parseHash().uid === it.uid) renderPartsBody(it, rows);
+    } catch (err) {
+      console.error(err);
+      if (!cached) { const b = $('#partsBody'); if (b) b.innerHTML = `<div class="state state--error"><p><b>${esc(t('partsError'))}</b><br>${esc(err.message)}</p></div>`; }
+    }
   }
 
   /* ---------- Lightbox (полноэкранный просмотр) ---------- */
@@ -834,7 +991,7 @@
     searchTimer = setTimeout(() => {
       state.query = searchEl.value.trim();
       const r = parseHash();
-      if (r.view === 'set') { location.hash = lastListHash; return; }
+      if (r.view === 'set' || r.view === 'parts') { location.hash = lastListHash; return; }
       renderList(r.cat || '', true);
     }, 120);
   });

@@ -31,6 +31,15 @@
 
 Настройки (ID таблицы, gid листа, валюта) — в начале `app.js`, объект `CONFIG`.
 
+## Каталог деталей
+
+- Вкладка **Parts**: `Set ID, Part ID, Name, Image Link, Quantity, Availability, Comment`.
+  В `Availability` пишите «Да» / «Нет» (на сайте — зелёная галочка / красный крестик), в `Comment` — заметку.
+- На сайте: карточка набора → «Деталей … Список деталей →» (`#/set/<номер>/parts`).
+  Детали запрашиваются у API по `?parts=<Set ID>`.
+- Первичное заполнение — с BrickOwl через `tools/brickowl-parts.js` (в браузере на brickowl.com),
+  затем импорт CSV во вкладку Parts. BrickOwl не пускает запросы с серверов Google, поэтому из Apps Script собрать нельзя.
+
 ## Обновление цен BrickLink
 
 1. Войти в BrickLink в браузере (для гостей лимит ~40 страниц price guide).
