@@ -318,10 +318,7 @@
 
       const main = get('mainPhoto');
       const extra = get('photos').split(/[;\n]+/).map((s) => s.trim()).filter(isUrl);
-      // у минифигурки одно фото (главное), у набора — главное + дополнительные
-      const photos = kind === 'fig'
-        ? [isUrl(main) ? main : extra[0]].filter(Boolean)
-        : [...new Set([main, ...extra].filter(isUrl))];
+      const photos = [...new Set([main, ...extra].filter(isUrl))];
       const catPath = get('category').split('>').map((s) => s.trim()).filter(Boolean);
       const year = get('year');
       const ym = year.match(/\b(19|20)\d{2}\b/);
