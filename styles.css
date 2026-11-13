@@ -80,6 +80,20 @@ img { display: block; }
   background: var(--ink); color: #fff; font-weight: 700; cursor: pointer;
 }
 
+/* ---------- Language switcher ---------- */
+.lang { margin-left: auto; position: relative; flex-shrink: 0; }
+.lang::after {
+  content: ""; position: absolute; right: 9px; top: 50%; margin-top: -2px; pointer-events: none;
+  border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--ink);
+}
+.lang select {
+  appearance: none; -webkit-appearance: none;
+  height: 30px; padding: 0 22px 0 10px; border-radius: 999px;
+  border: 2px solid var(--ink); background: #fff; color: var(--ink);
+  font: inherit; font-size: 12px; font-weight: 800; letter-spacing: .5px; cursor: pointer;
+}
+.lang select:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--blue); }
+
 /* ---------- Layout ---------- */
 .layout {
   max-width: 1440px; margin: 0 auto;
@@ -126,6 +140,29 @@ img { display: block; }
 .tree__count { color: var(--muted); font-weight: 600; font-size: 13px; }
 .tree__link.active .tree__count { color: var(--ink); }
 .tree__all { padding-left: 12px; }
+/* ---------- Years ---------- */
+.years { border-top: 1px solid var(--line); padding: 10px 16px 12px; flex-shrink: 0; }
+.years:empty { display: none; }
+.years__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.years__head h2 { margin: 0; font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .4px; color: var(--muted); }
+.years__reset { border: 0; background: none; padding: 0; color: var(--blue); font-weight: 700; font-size: 12px; cursor: pointer; text-decoration: underline; }
+.years__list {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+  max-height: 168px; overflow-y: auto; scrollbar-width: thin; padding: 2px;
+}
+.year {
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  height: 30px; padding: 0 6px; border-radius: 8px; cursor: pointer;
+  border: 1.5px solid var(--line); background: #fff; color: var(--ink);
+  font: inherit; font-size: 13px; font-weight: 800;
+}
+.year:first-child { grid-column: 1 / -1; }
+.year span { font-size: 11px; font-weight: 700; color: var(--muted); }
+.year:hover { border-color: var(--ink); }
+.year.active { background: var(--yellow); border-color: var(--ink); }
+.year.active span { color: var(--ink); }
+.year--empty { opacity: .45; }
+
 .sync {
   padding: 10px 16px; border-top: 1px solid var(--line);
   font-size: 12px; color: var(--muted);
@@ -368,6 +405,20 @@ body.no-scroll { overflow: hidden; }
   .lightbox__thumbs button { flex-basis: 56px; height: 44px; }
 }
 
+/* ---------- Back to top (LEGO brick) ---------- */
+.to-top {
+  position: fixed; right: 20px; bottom: 20px; z-index: 45;
+  width: 52px; height: 48px; padding: 0; border: 0; background: none; cursor: pointer;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,.25));
+  opacity: 0; transform: translateY(16px) scale(.9); pointer-events: none;
+  transition: opacity .2s, transform .2s;
+}
+.to-top.show { opacity: 1; transform: none; pointer-events: auto; }
+.to-top svg { width: 100%; height: 100%; display: block; }
+.to-top:hover { transform: translateY(-3px); }
+.to-top:active { transform: translateY(1px) scale(.97); }
+.to-top:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; border-radius: 8px; }
+
 /* ---------- Footer ---------- */
 .footer { max-width: 1440px; margin: 0 auto; padding: 8px 24px 32px; color: var(--muted); font-size: 12px; }
 .backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 40; }
@@ -379,6 +430,7 @@ body.no-scroll { overflow: hidden; }
 @media (max-width: 900px) {
   .layout { grid-template-columns: 1fr; padding: 16px; }
   .tree-toggle { display: inline-block; }
+  .lang { margin-left: 0; }
   .sidebar {
     position: fixed; top: 0; right: 0; bottom: 0; z-index: 50;
     width: min(340px, 88vw); max-height: none; border-radius: 0;
@@ -390,6 +442,15 @@ body.no-scroll { overflow: hidden; }
 @media (max-width: 640px) {
   .topbar__inner { flex-wrap: wrap; gap: 10px; padding: 10px 16px; }
   .search { order: 3; flex-basis: 100%; max-width: none; }
+  .to-top { right: 14px; bottom: 14px; width: 46px; height: 42px; }
+  .brand { gap: 8px; }
+  .brand__brick { width: 30px; height: 21px; }
+  .brand__brick i { width: 8px; height: 6px; top: -5px; }
+  .brand__brick i:first-child { left: 5px; }
+  .brand__brick i:last-child { right: 5px; }
+  .brand__text { font-size: 19px; }
+  .lang { order: 1; margin-left: auto; }
+  .tree-toggle { order: 2; margin-left: 0; height: 34px; padding: 0 12px; font-size: 14px; }
   .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .card__body { padding: 10px; }
   .toolbar h1 { font-size: 22px; }
