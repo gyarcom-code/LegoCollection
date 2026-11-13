@@ -467,15 +467,17 @@
     const open = !state.collapsed.years;
     yearsEl.classList.toggle('years--open', open);
     yearsEl.innerHTML = `
-      <div class="years__head">
+      <div class="panel__head">
         <button type="button" class="block-toggle" id="yearsToggle" aria-expanded="${open}">
           <h2>${esc(t('years'))}${state.year ? `: <span class="years__current">${esc(state.year === 'none' ? t('yearNone') : state.year)}</span>` : ''}</h2>${CHEV}
         </button>
-        ${state.year ? `<button type="button" class="years__reset" data-year="">${esc(t('allYears'))}</button>` : ''}
+        ${state.year ? `<button type="button" class="years__reset" data-year="" aria-label="${esc(t('allYears'))}" title="${esc(t('allYears'))}">✕</button>` : ''}
       </div>
-      <div class="years__list">
-        <button type="button" class="year${!state.year ? ' active' : ''}" data-year="">${esc(t('allYears'))} <span>${total}</span></button>
-        ${keys.map((y) => `<button type="button" class="year${state.year === y ? ' active' : ''}${counts.get(y) ? '' : ' year--empty'}" data-year="${esc(y)}">${esc(y === 'none' ? t('yearNone') : y)} <span>${counts.get(y)}</span></button>`).join('')}
+      <div class="years__body">
+        <div class="years__list">
+          <button type="button" class="year${!state.year ? ' active' : ''}" data-year="">${esc(t('allYears'))} <span>${total}</span></button>
+          ${keys.map((y) => `<button type="button" class="year${state.year === y ? ' active' : ''}${counts.get(y) ? '' : ' year--empty'}" data-year="${esc(y)}">${esc(y === 'none' ? t('yearNone') : y)} <span>${counts.get(y)}</span></button>`).join('')}
+        </div>
       </div>`;
   }
 
