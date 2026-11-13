@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Lego Collection — каталог</title>
   <meta name="description" content="Lego Collection">
-  <meta name="build" content="20261113154814">
+  <meta name="build" content="20261113162007">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='18' width='56' height='40' rx='6' fill='%23ffd400'/><rect x='12' y='8' width='14' height='12' rx='3' fill='%23ffd400'/><rect x='38' y='8' width='14' height='12' rx='3' fill='%23ffd400'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800;6..12,900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261113154814">
+  <link rel="stylesheet" href="styles.css?v=20261113162007">
 </head>
 <body>
   <header class="topbar">
@@ -23,7 +23,7 @@
         <svg class="search__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4a6 6 0 1 0 3.9 10.6l4.7 4.7 1.4-1.4-4.7-4.7A6 6 0 0 0 10 4Zm0 2a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z"/></svg>
         <input id="search" type="search" data-i18n-placeholder="searchPh" data-i18n-aria="searchPh" autocomplete="off">
       </form>
-      <button class="tree-toggle" id="treeToggle" type="button" aria-controls="sidebar" aria-expanded="false" data-i18n="categories">Категорії</button>
+      <button class="tree-toggle" id="treeToggle" type="button" aria-controls="sidebar" aria-expanded="false"><svg class="tree-toggle__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8.5V20l-4-2v-4.5L3 5z"/></svg><span data-i18n="filters">Фільтри</span><span class="tree-toggle__badge" id="filterBadge" hidden></span></button>
       <label class="lang" data-i18n-title="lang">
         <select id="lang" data-i18n-aria="lang">
           <option value="ua">UA</option>
@@ -42,19 +42,24 @@
       </div>
     </main>
 
-    <aside class="sidebar" id="sidebar" data-i18n-aria="categories">
+    <aside class="sidebar" id="sidebar" data-i18n-aria="filters">
+      <div class="drawer-head">
+        <h2 data-i18n="filters">Фільтри</h2>
+        <button class="sidebar__close" id="treeClose" type="button" data-i18n-aria="close">×</button>
+      </div>
       <section class="panel panel--cats">
         <div class="panel__head">
           <button class="block-toggle" id="catsToggle" type="button" aria-expanded="true" aria-controls="tree">
             <h2 data-i18n="categories">Категорії</h2>
             <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4z"/></svg>
           </button>
-          <button class="sidebar__close" id="treeClose" type="button" data-i18n-aria="close">×</button>
         </div>
         <nav id="tree" class="tree"></nav>
       </section>
       <section id="years" class="panel years"></section>
+      <section id="condPanel" class="panel cond-panel"></section>
       <div class="sync" id="sync"></div>
+      <div class="drawer-foot"><button type="button" class="drawer-foot__btn" id="drawerApply"></button></div>
     </aside>
   </div>
 
@@ -96,6 +101,6 @@
         .catch(function () {});
     })();
   </script>
-  <script src="app.js?v=20261113154814"></script>
+  <script src="app.js?v=20261113162007"></script>
 </body>
 </html>

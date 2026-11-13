@@ -40,6 +40,7 @@
       partsEmpty: 'Список деталей для цього набору ще не заповнено.', partsError: 'Не вдалося завантажити деталі.',
       lots: 'Позицій', piecesTotal: 'Деталей', have: 'Є', missing: 'Немає', partsSearch: 'Пошук деталі за назвою або номером',
       partsNothing: 'Нічого не знайдено.', partId: 'Номер', qtyShort: 'шт.', availUnknown: 'Не вказано',
+      filters: 'Фільтри', condition: 'Стан', showN: 'Показати {n}', resetAll: 'Скинути все',
     },
     en: {
       htmlLang: 'en', locale: 'en-GB', title: 'Lego Collection — catalog',
@@ -65,6 +66,7 @@
       partsEmpty: 'The parts list for this set hasn’t been filled in yet.', partsError: 'Couldn’t load the parts.',
       lots: 'Lots', piecesTotal: 'Pieces', have: 'Have', missing: 'Missing', partsSearch: 'Search parts by name or number',
       partsNothing: 'Nothing found.', partId: 'Part', qtyShort: 'pcs', availUnknown: 'Not specified',
+      filters: 'Filters', condition: 'Condition', showN: 'Show {n}', resetAll: 'Reset all',
     },
     ru: {
       htmlLang: 'ru', locale: 'ru-RU', title: 'Lego Collection — каталог',
@@ -90,6 +92,7 @@
       partsEmpty: 'Список деталей для этого набора ещё не заполнен.', partsError: 'Не удалось загрузить детали.',
       lots: 'Позиций', piecesTotal: 'Деталей', have: 'Есть', missing: 'Нет', partsSearch: 'Поиск детали по названию или номеру',
       partsNothing: 'Ничего не найдено.', partId: 'Номер', qtyShort: 'шт.', availUnknown: 'Не указано',
+      filters: 'Фильтры', condition: 'Состояние', showN: 'Показать {n}', resetAll: 'Сбросить всё',
     },
   };
   const store = {
@@ -507,7 +510,6 @@
       li.classList.contains('open') ? state.openNodes.add(p) : state.openNodes.delete(p);
       return;
     }
-    if (e.target.closest('.tree__link')) closeSidebar();
   });
 
   /* ---------- Years block ---------- */
@@ -542,7 +544,6 @@
     const b = e.target.closest('[data-year]');
     if (!b) return;
     state.year = b.dataset.year;
-    closeSidebar();
     if (parseHash().view !== 'list') { location.hash = lastListHash; return; }
     renderList(parseHash().cat || '', true);
   });
@@ -666,10 +667,33 @@
       const bar = content.querySelector('.filters'), chip = content.querySelector('.chip.active');
       if (bar && chip) bar.scrollLeft = chip.offsetLeft - bar.clientWidth / 2 + chip.clientWidth / 2;
     }));
+    renderDrawerExtras(cat, base.filter(byYear).length, condList, list.length);
     const reset = $('#resetFilters');
     if (reset) reset.onclick = () => { state.cond = ''; state.year = ''; renderList(cat, true); };
     if (!keepScroll) window.scrollTo({ top: 0, behavior: 'instant' });
   }
+
+  /* ---------- Drawer (мобильное окно фильтров) ---------- */
+  const condPanelEl = $('#condPanel');
+  const badgeEl = $('#filterBadge');
+  const applyEl = $('#drawerApply');
+  function renderDrawerExtras(cat, total, condList, shown) {
+    condPanelEl.innerHTML = `
+      <div class="panel__head"><h2>${esc(t('condition'))}</h2></div>
+      <div class="cond-panel__body">
+        <button type="button" class="chip${!state.cond ? ' active' : ''}" data-dcond="">${esc(t('all'))} <span>${total}</span></button>
+        ${condList.map(([k, n]) => `<button type="button" class="chip chip--${condMeta(k).cls}${state.cond === k ? ' active' : ''}" data-dcond="${esc(k)}">${esc(condMeta(k).label)} <span>${n}</span></button>`).join('')}
+      </div>`;
+    condPanelEl.querySelectorAll('[data-dcond]').forEach((b) => b.addEventListener('click', () => {
+      state.cond = b.dataset.dcond;
+      renderList(cat, true);
+    }));
+    const active = (cat ? 1 : 0) + (state.year ? 1 : 0) + (state.cond ? 1 : 0);
+    badgeEl.hidden = !active;
+    badgeEl.textContent = active;
+    applyEl.textContent = `${t('showN', { n: shown })} ${plural(shown)}`;
+  }
+  applyEl.addEventListener('click', closeSidebar);
 
   /* ---------- Product page ---------- */
   function yesNo(v) {
@@ -998,8 +1022,15 @@
 
   /* ---------- Mobile sidebar ---------- */
   const toggle = $('#treeToggle');
-  function openSidebar() { sidebar.classList.add('open'); backdrop.hidden = false; toggle.setAttribute('aria-expanded', 'true'); }
-  function closeSidebar() { sidebar.classList.remove('open'); backdrop.hidden = true; toggle.setAttribute('aria-expanded', 'false'); }
+  function openSidebar() {
+    sidebar.classList.add('open'); backdrop.hidden = false; toggle.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('drawer-open'); sidebar.scrollTop = 0;
+  }
+  function closeSidebar() {
+    if (!sidebar.classList.contains('open')) return;
+    sidebar.classList.remove('open'); backdrop.hidden = true; toggle.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('drawer-open');
+  }
   toggle.onclick = openSidebar;
   $('#treeClose').onclick = closeSidebar;
   backdrop.onclick = closeSidebar;
