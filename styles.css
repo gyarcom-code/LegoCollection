@@ -88,7 +88,7 @@ img { display: block; }
 .tree-toggle__badge[hidden] { display: none; }
 
 /* ---------- Language switcher ---------- */
-.lang { margin-left: auto; position: relative; flex-shrink: 0; }
+.lang { position: relative; flex-shrink: 0; }
 .lang::after {
   content: ""; position: absolute; right: 9px; top: 50%; margin-top: -2px; pointer-events: none;
   border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--ink);
@@ -100,6 +100,46 @@ img { display: block; }
   font: inherit; font-size: 12px; font-weight: 800; letter-spacing: .5px; cursor: pointer;
 }
 .lang select:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--blue); }
+
+/* ---------- Stats button (кубик с вопросом) + окно статистики ---------- */
+.stats-btn {
+  flex-shrink: 0; margin-left: auto; width: 34px; height: 34px; padding: 0; border: 0; background: none; cursor: pointer;
+  transition: transform .15s;
+}
+.stats-btn svg { width: 100%; height: 100%; display: block; }
+.stats-btn:hover { transform: translateY(-2px) rotate(-6deg); }
+.stats-btn:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; border-radius: 6px; }
+.modal { position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; padding: 16px; background: rgba(0,0,0,.5); }
+.modal[hidden] { display: none; }
+.modal__box {
+  width: min(560px, 100%); max-height: calc(100vh - 32px); overflow: auto;
+  background: #fff; border-radius: 14px; border: 3px solid var(--ink); box-shadow: var(--shadow-lg);
+}
+.modal__head {
+  position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 18px; background: var(--yellow); border-bottom: 3px solid var(--ink);
+}
+.modal__head h2 { margin: 0; font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: .3px; }
+.modal__close { border: 0; background: none; font-size: 28px; line-height: 1; cursor: pointer; color: var(--ink); padding: 0 4px; }
+.modal__body { padding: 18px; display: grid; gap: 18px; }
+.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.stat { background: var(--bg); border-radius: 10px; padding: 12px 14px; }
+.stat__label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .3px; }
+.stat__value { font-size: 26px; font-weight: 900; margin-top: 2px; }
+.stat--accent { background: var(--ink); color: #fff; }
+.stat--accent .stat__label { color: var(--yellow); }
+.stats-table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.stats-table th, .stats-table td { padding: 10px 8px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+.stats-table th:first-child, .stats-table td:first-child { text-align: left; }
+.stats-table thead th { font-size: 12px; text-transform: uppercase; letter-spacing: .3px; color: var(--muted); }
+.stats-table tfoot td { font-weight: 900; border-bottom: 0; border-top: 2px solid var(--ink); }
+.stats-table small { display: block; color: var(--muted); font-weight: 600; font-size: 11px; }
+.stats-note { margin: 0; color: var(--muted); font-size: 12px; }
+@media (max-width: 640px) {
+  .stats-btn { order: 1; margin-left: auto; width: 30px; height: 30px; }
+  .stat__value { font-size: 22px; }
+  .stats-table { font-size: 14px; }
+}
 
 /* ---------- Layout ---------- */
 .layout {
@@ -509,7 +549,7 @@ body.no-scroll { overflow: hidden; }
 @media (max-width: 900px) {
   .layout { grid-template-columns: 1fr; padding: 16px; }
   .tree-toggle { display: inline-flex; }
-  .lang { margin-left: 0; }
+  .stats-btn { margin-left: 0; }
   .sidebar {
     position: fixed; top: 0; right: 0; bottom: 0; z-index: 50;
     width: min(360px, 90vw); max-height: none;
@@ -549,7 +589,7 @@ body.no-scroll { overflow: hidden; }
   .brand__text { font-size: 17px; }
   .brand { min-width: 0; }
   .lang select { padding: 0 20px 0 8px; }
-  .lang { order: 1; margin-left: auto; }
+  .lang { order: 1; }
   .tree-toggle { order: 2; margin-left: 0; height: 34px; padding: 0 10px; gap: 6px; font-size: 14px; }
   .tree-toggle__icon { width: 14px; height: 14px; }
   .tree-toggle__badge { min-width: 18px; height: 18px; font-size: 11px; padding: 0 5px; }

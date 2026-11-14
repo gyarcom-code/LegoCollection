@@ -41,6 +41,7 @@
       lots: 'Позицій', piecesTotal: 'Деталей', have: 'Є', missing: 'Немає', partsSearch: 'Пошук деталі за назвою або номером',
       partsNothing: 'Нічого не знайдено.', partId: 'Номер', qtyShort: 'шт.', availUnknown: 'Не вказано',
       filters: 'Фільтри', condition: 'Стан', showN: 'Показати {n}', resetAll: 'Скинути все',
+      stats: 'Статистика колекції', statSets: 'Наборів', statPieces: 'Деталей у наборах', statFigsSeparate: 'Мініфігурок окремо', statFigsInSets: 'Мініфігурок у наборах', statFigsTotal: 'Мініфігурок разом', statValue: 'Вартість колекції', colSets: 'Набори', colFigs: 'Мініфігурки', colTotal: 'Разом', noPriceN: 'без ціни: {n}', statsNote: 'Сума цін з таблиці (колонки Price on BrickLink / BrickOwl), дані оновлюються разом із каталогом.',
       allFigs: 'Усі мініфігурки', figNo: 'Мініфігурка №', figs: ['мініфігурка', 'мініфігурки', 'мініфігурок'], cond_used: 'Вживаний',
     },
     en: {
@@ -68,6 +69,7 @@
       lots: 'Lots', piecesTotal: 'Pieces', have: 'Have', missing: 'Missing', partsSearch: 'Search parts by name or number',
       partsNothing: 'Nothing found.', partId: 'Part', qtyShort: 'pcs', availUnknown: 'Not specified',
       filters: 'Filters', condition: 'Condition', showN: 'Show {n}', resetAll: 'Reset all',
+      stats: 'Collection stats', statSets: 'Sets', statPieces: 'Pieces in sets', statFigsSeparate: 'Separate minifigures', statFigsInSets: 'Minifigures in sets', statFigsTotal: 'Minifigures total', statValue: 'Collection value', colSets: 'Sets', colFigs: 'Minifigures', colTotal: 'Total', noPriceN: 'no price: {n}', statsNote: 'Sum of prices from the sheet (Price on BrickLink / BrickOwl columns), updated together with the catalog.',
       allFigs: 'All minifigures', figNo: 'Minifigure #', figs: ['minifigure', 'minifigures'], cond_used: 'Used',
     },
     ru: {
@@ -95,6 +97,7 @@
       lots: 'Позиций', piecesTotal: 'Деталей', have: 'Есть', missing: 'Нет', partsSearch: 'Поиск детали по названию или номеру',
       partsNothing: 'Ничего не найдено.', partId: 'Номер', qtyShort: 'шт.', availUnknown: 'Не указано',
       filters: 'Фильтры', condition: 'Состояние', showN: 'Показать {n}', resetAll: 'Сбросить всё',
+      stats: 'Статистика коллекции', statSets: 'Наборов', statPieces: 'Деталей в наборах', statFigsSeparate: 'Минифигурок отдельно', statFigsInSets: 'Минифигурок в наборах', statFigsTotal: 'Минифигурок всего', statValue: 'Стоимость коллекции', colSets: 'Наборы', colFigs: 'Минифигурки', colTotal: 'Итого', noPriceN: 'без цены: {n}', statsNote: 'Сумма цен из таблицы (колонки Price on BrickLink / BrickOwl), данные обновляются вместе с каталогом.',
       allFigs: 'Все минифигурки', figNo: 'Минифигурка №', figs: ['минифигурка', 'минифигурки', 'минифигурок'], cond_used: 'Б/у',
     },
   };
@@ -389,6 +392,7 @@
         state.tree = { set: buildTree(items), fig: buildTree(figs) };
         renderTree();
         route({ keepScroll: silent, refresh: true, data: true });
+        if (statsOpen()) renderStats();
       }
       renderSync();
     } catch (err) {
@@ -1054,6 +1058,7 @@
   let keyHandler = null;
   document.addEventListener('keydown', (e) => {
     if (lightbox.key(e)) return;
+    if (statsOpen()) { if (e.key === 'Escape') closeStats(); return; }
     if (e.key === 'Escape') closeSidebar();
     if (keyHandler && parseHash().view === 'set') keyHandler(e);
   });
@@ -1095,6 +1100,62 @@
   catsToggle.addEventListener('click', () => { setCollapsed('cats', !state.collapsed.cats); applyCatsCollapsed(); });
   applyCatsCollapsed();
 
+  /* ---------- Статистика коллекции (кнопка-кубик «?» в шапке) ---------- */
+  const statsModal = $('#statsModal');
+  const statsBody = $('#statsBody');
+  const statsBtn = $('#statsBtn');
+  const fmtInt = (n) => n.toLocaleString(t('locale'));
+
+  function renderStats() {
+    const sets = state.items, figs = state.figs;
+    const sumBy = (list, key) => list.reduce((s, it) => s + (it[key] ?? 0), 0);
+    const missing = (list, key) => list.filter((it) => it[key] == null).length;
+    const figsInSets = sets.reduce((s, it) => s + (num(it.minifigs) ?? 0), 0);
+    const pieces = sets.reduce((s, it) => s + (num(it.pcs) ?? 0), 0);
+    const stat = (label, value, accent) => `<div class="stat${accent ? ' stat--accent' : ''}"><div class="stat__label">${esc(label)}</div><div class="stat__value">${esc(value)}</div></div>`;
+    const cell = (list, key) => {
+      const n = missing(list, key);
+      return `<td>${esc(money(sumBy(list, key)))}${n ? `<small>${esc(t('noPriceN', { n }))}</small>` : ''}</td>`;
+    };
+    const all = [...sets, ...figs];
+    statsBody.innerHTML = `
+      <div class="stats-grid">
+        ${stat(t('statSets'), fmtInt(sets.length))}
+        ${stat(t('statPieces'), fmtInt(pieces))}
+        ${stat(t('statFigsSeparate'), fmtInt(figs.length))}
+        ${stat(t('statFigsInSets'), fmtInt(figsInSets))}
+        ${stat(t('statFigsTotal'), fmtInt(figs.length + figsInSets), true)}
+      </div>
+      <div>
+        <h3 class="section-title">${esc(t('statValue'))}</h3>
+        <table class="stats-table">
+          <thead><tr><th></th><th>BrickLink</th><th>BrickOwl</th></tr></thead>
+          <tbody>
+            <tr><td>${esc(t('colSets'))}</td>${cell(sets, 'blPrice')}${cell(sets, 'boPrice')}</tr>
+            <tr><td>${esc(t('colFigs'))}</td>${cell(figs, 'blPrice')}${cell(figs, 'boPrice')}</tr>
+          </tbody>
+          <tfoot><tr><td>${esc(t('colTotal'))}</td><td>${esc(money(sumBy(all, 'blPrice')))}</td><td>${esc(money(sumBy(all, 'boPrice')))}</td></tr></tfoot>
+        </table>
+      </div>
+      <p class="stats-note">${esc(t('statsNote'))}</p>`;
+  }
+  const statsOpen = () => !statsModal.hidden;
+  function openStats() {
+    renderStats();
+    statsModal.hidden = false;
+    document.body.classList.add('no-scroll');
+    $('#statsClose').focus();
+  }
+  function closeStats() {
+    if (!statsOpen()) return;
+    statsModal.hidden = true;
+    document.body.classList.remove('no-scroll');
+    statsBtn.focus();
+  }
+  statsBtn.addEventListener('click', openStats);
+  $('#statsClose').addEventListener('click', closeStats);
+  statsModal.addEventListener('click', (e) => { if (e.target === statsModal) closeStats(); });
+
   /* ---------- Back to top ---------- */
   toTopEl.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
@@ -1116,6 +1177,7 @@
     renderTree();
     route({ keepScroll: true, refresh: true });
     renderSync(state.syncMsg || undefined);
+    if (statsOpen()) renderStats();
   });
 
   /* ---------- Start ---------- */
